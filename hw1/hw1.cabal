@@ -1,0 +1,174 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           hw1
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/DK318/fp-hw1-tests/blob/master/README.md>
+homepage:       https://github.com/DK318/fp-hw1-tests/blob/master/README.md
+bug-reports:    https://github.com/DK318/fp-hw1-tests/issues
+author:         Leonid Vasilev && Gleb Pushkarev
+maintainer:     vasiklenka@gmail.com or gleb.pushkarev@gmail.com
+copyright:      2021 Leonid Vasilev && Gleb Pushkarev
+license:        GPL-3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/DK318/fp-hw1-tests
+
+library
+  exposed-modules:
+      HW1.T1
+      HW1.T2
+      HW1.T3
+      HW1.T4
+      HW1.T5
+      HW1.T6
+      HW1.T7
+  other-modules:
+      Paths_hw1
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable hw1-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_hw1
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , hw1
+  default-language: Haskell2010
+
+test-suite hw1-t1-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T1Spec
+      Paths_hw1
+  hs-source-dirs:
+      test/T1
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
+
+test-suite hw1-t2-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T2Spec
+      T2SpecAdvanced
+      Paths_hw1
+  hs-source-dirs:
+      test/T2
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
+
+test-suite hw1-t34-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T3andT4Spec
+      Paths_hw1
+  hs-source-dirs:
+      test/T3T4
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
+
+test-suite hw1-t5-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T5Spec
+      Paths_hw1
+  hs-source-dirs:
+      test/T5
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
+
+test-suite hw1-t6-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T6Spec
+      Paths_hw1
+  hs-source-dirs:
+      test/T6
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
+
+test-suite hw1-t7-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      T7Spec
+      Paths_hw1
+  hs-source-dirs:
+      test/T7
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hedgehog
+    , hspec
+    , hw1
+    , tasty
+    , tasty-hedgehog
+    , tasty-hspec
+  default-language: Haskell2010
