@@ -1,0 +1,11 @@
+resolver: lts-18.5
+
+packages:
+- hw1
+- hw2
+
+extra-deps: []
+
+flags: {}
+
+extra-package-dbs: []

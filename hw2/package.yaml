@@ -1,10 +1,10 @@
-name:                hw1
+name:                hw2
 version:             0.1.0.0
-github:              "NelosG/hw1/fp-tests"
+github:              "NelosG/hw2/fp-tests"
 license:             GPL-3
-author:              "Leonid Vasilev && Gleb Pushkarev"
-maintainer:          "vasiklenka@gmail.com or gleb.pushkarev@gmail.com"
-copyright:           "2021 Leonid Vasilev && Gleb Pushkarev"
+author:              "Gleb Pushkarev"
+maintainer:          "gleb.pushkarev@gmail.com"
+copyright:           "2021 Gleb Pushkarev"
 
 extra-source-files:
 - README.md
@@ -16,8 +16,8 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw1/README.md>
-homepage:       https://github.com/NelosG/fp-tests/blob/master/hw1/README.md
+description:         Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
+homepage:       https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
 
 dependencies:
 - base >= 4.7 && < 5
@@ -26,7 +26,7 @@ library:
   source-dirs: src
 
 executables:
-  hw1-exe:
+  hw2-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -34,7 +34,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
+    - hw2
 
 tests:
   t1:
@@ -45,7 +45,7 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
+    - hw2
     - tasty-hspec
     - tasty-hedgehog
     - tasty
@@ -60,28 +60,43 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
+    - hw2
     - tasty-hspec
     - tasty-hedgehog
     - tasty
     - hspec
     - hedgehog
     - containers
-  t3-4:
+  t3:
     main:                Spec.hs
-    source-dirs:         test/T3T4
+    source-dirs:         test/T3
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
+    - hw2
     - tasty-hspec
     - tasty-hedgehog
     - tasty
     - hspec
     - hedgehog
     - containers
+  t4:
+    main:                Spec.hs
+    source-dirs:         test/T4
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw2
+    - tasty-hspec
+    - tasty-hedgehog
+    - tasty
+    - hspec
+    - hedgehog
+    - containers  
   t5:
     main:                Spec.hs
     source-dirs:         test/T5
@@ -90,7 +105,7 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
+    - hw2
     - tasty-hspec
     - tasty-hedgehog
     - tasty
@@ -105,22 +120,7 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - hw1
-    - tasty-hspec
-    - tasty-hedgehog
-    - tasty
-    - hspec
-    - hedgehog
-    - containers
-  t7:
-    main:                Spec.hs
-    source-dirs:         test/T7
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - hw1
+    - hw2
     - tasty-hspec
     - tasty-hedgehog
     - tasty
