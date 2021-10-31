@@ -56,6 +56,16 @@ test-suite t1
   main-is: Spec.hs
   other-modules:
       T1Spec
+      Test.T1Annotated
+      Test.T1Except
+      Test.T1Fun
+      Test.T1List
+      Test.T1Option
+      Test.T1Pair
+      Test.T1Prioritised
+      Test.T1Quad
+      Test.T1Stream
+      Test.T1Tree
       Paths_hw2
   hs-source-dirs:
       test/T1
