@@ -1,15 +1,19 @@
+{-# LANGUAGE PartialTypeSignatures #-}
+{-# LANGUAGE StandaloneDeriving    #-}
+
 module Test.T1Tree where
 import HW2.T1 (Tree (Leaf, Branch), mapTree)
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hspec
 import Data.Foldable
+import Hedgehog
+import qualified Hedgehog.Gen as Gen
+import Test.Common
+import Test.Tasty.Hedgehog
 
-instance Eq a => Eq (Tree a) where
-    (==) (Branch al av ar) (Branch bl bv br) = al == bl && av == bv && ar == br
-    (==) Leaf Leaf = True
-    (==) _ _ = False
-
+deriving instance _ => Show (Tree a)
+deriving instance _ => Eq (Tree a)
 
 tInsert :: Ord a => a -> Tree a -> Tree a
 tInsert a Leaf = Branch Leaf a Leaf
@@ -37,3 +41,14 @@ hspecTree = testSpec "Tree tests:" $ do
         it "Tree test1" $ mapTree (+ 1) (tFromList [1, 2, 3]) `shouldBe` tFromList [2, 3, 4]
         it "Tree test2" $ mapTree (+ 1) (tFromListIns tInsertSec [1, 2, 3]) `shouldBe` tFromListIns tInsertSec [2, 3, 4]
         it "Tree(f . g) test" $ (mapTree (+ 1) . mapTree (* 10)) (tFromList [1, 2, 3]) `shouldBe` tFromList [11, 21, 31]
+
+genTree :: Gen (Tree Int)
+genTree = Gen.choice [Gen.constant Leaf, genBranch]
+  where
+    genBranch = Branch <$> genTree <*> genInt <*> genTree
+
+propTree :: TestTree
+propTree = testGroup "Tree properties" [
+    testProperty "Tree id property" $ idProp genTree mapTree
+  , testProperty "Tree composition property" $ compProp genTree mapTree
+  ]

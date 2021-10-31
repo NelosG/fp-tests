@@ -1,6 +1,8 @@
 import T1Spec
 
-import Test.Tasty ( defaultMain )
+import Test.Tasty ( defaultMain, testGroup )
 
 main :: IO ()
-main = tests >>= \test -> defaultMain test
+main = do
+  test <- tests
+  defaultMain test

@@ -56,6 +56,7 @@ test-suite t1
   main-is: Spec.hs
   other-modules:
       T1Spec
+      Test.Common
       Test.T1Annotated
       Test.T1Except
       Test.T1Fun
