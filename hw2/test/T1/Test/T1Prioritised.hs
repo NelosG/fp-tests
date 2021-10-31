@@ -1,15 +1,18 @@
+{-# LANGUAGE PartialTypeSignatures #-}
+{-# LANGUAGE StandaloneDeriving    #-}
+
 module Test.T1Prioritised where
 import HW2.T1 (Prioritised (High, Low, Medium), mapPrioritised)
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hspec
+import Hedgehog
+import qualified Hedgehog.Gen as Gen
+import Test.Common
+import Test.Tasty.Hedgehog
 
-instance Eq a => Eq (Prioritised a) where
-    (==) (Low a) (Low b)       = a == b
-    (==) (Medium a) (Medium b) = a == b
-    (==) (High a) (High b)     = a == b
-    (==) _ _                   = False
-
+deriving instance _ => Show (Prioritised a)
+deriving instance _ => Eq (Prioritised a)
 
 hspecPrioritised :: IO TestTree
 hspecPrioritised = testSpec "Prioritised tests:" $ do
@@ -21,3 +24,16 @@ hspecPrioritised = testSpec "Prioritised tests:" $ do
         it "Low(f . g) test" $ (mapPrioritised (+ 1) . mapPrioritised (* 10)) (Low 1) `shouldBe` Low 11
         it "Medium(f . g) test" $ (mapPrioritised (+ 1) . mapPrioritised (* 10)) (Medium 1) `shouldBe` Medium 11
         it "High(f . g) test" $ (mapPrioritised (+ 1) . mapPrioritised (* 10)) (High 1) `shouldBe` High 11
+
+genPrioritised :: Gen (Prioritised Int)
+genPrioritised = Gen.choice [genLow, genMedium, genHigh]
+  where
+    genLow = Low <$> genInt
+    genMedium = Medium <$> genInt
+    genHigh = High <$> genInt
+
+propPrioritised :: TestTree
+propPrioritised = testGroup "Prioritised properties" [
+    testProperty "Prioritised id property" $ idProp genPrioritised mapPrioritised
+  , testProperty "Prioritised composition property" $ compProp genPrioritised mapPrioritised
+  ]
