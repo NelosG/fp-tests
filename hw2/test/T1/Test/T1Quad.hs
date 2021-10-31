@@ -3,15 +3,15 @@
 
 module Test.T1Quad(hspecQuad, propQuad) where
 import HW2.T1 (Quad (Q), mapQuad)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
 import Hedgehog
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Quad a)
-deriving instance _ => Eq (Quad a)
+deriving instance (Show a) => Show (Quad a)
+deriving instance (Eq a) => Eq (Quad a)
 
 hspecQuad :: IO TestTree
 hspecQuad = testSpec "Quad tests:" $ do

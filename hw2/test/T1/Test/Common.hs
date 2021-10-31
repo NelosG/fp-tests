@@ -1,6 +1,6 @@
 module Test.Common where
-  
-import Hedgehog (Gen, Property, property, forAll, (===))
+
+import Hedgehog (Gen, Property, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 

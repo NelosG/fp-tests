@@ -3,17 +3,17 @@
 
 module Test.T1List(hspecList, propList) where
 import HW2.T1 (List (..), mapList)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (List a)
-deriving instance _ => Eq (List a)
+deriving instance (Show a) => Show (List a)
+deriving instance (Eq a) => Eq (List a)
 
 listFromStdList :: [a] -> List a
 listFromStdList = foldr (:.) Nil

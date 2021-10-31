@@ -3,16 +3,16 @@
 
 module Test.T1Prioritised where
 import HW2.T1 (Prioritised (High, Low, Medium), mapPrioritised)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Prioritised a)
-deriving instance _ => Eq (Prioritised a)
+deriving instance (Show a) => Show (Prioritised a)
+deriving instance (Eq a) => Eq (Prioritised a)
 
 hspecPrioritised :: IO TestTree
 hspecPrioritised = testSpec "Prioritised tests:" $ do

@@ -2,18 +2,18 @@
 {-# LANGUAGE StandaloneDeriving    #-}
 
 module Test.T1Tree where
-import HW2.T1 (Tree (Leaf, Branch), mapTree)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
 import Data.Foldable
+import HW2.T1 (Tree (Branch, Leaf), mapTree)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Tree a)
-deriving instance _ => Eq (Tree a)
+deriving instance (Show a) => Show (Tree a)
+deriving instance (Eq a) => Eq (Tree a)
 
 tInsert :: Ord a => a -> Tree a -> Tree a
 tInsert a Leaf = Branch Leaf a Leaf
@@ -25,7 +25,7 @@ tInsert a tree@(Branch l v r)
 
 --Creates right "bamboo"
 tInsertSec :: Ord a => a -> Tree a -> Tree a
-tInsertSec a Leaf = Branch Leaf a Leaf
+tInsertSec a Leaf           = Branch Leaf a Leaf
 tInsertSec a (Branch l v r) = tInsertSec a r
 
 tFromList :: Ord a => [a] -> Tree a

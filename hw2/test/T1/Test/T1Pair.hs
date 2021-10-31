@@ -3,15 +3,15 @@
 
 module Test.T1Pair where
 import HW2.T1 (Pair (P), mapPair)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
 import Hedgehog
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Pair a)
-deriving instance _ => Eq (Pair a)
+deriving instance (Show a) => Show (Pair a)
+deriving instance (Eq a) => Eq (Pair a)
 
 hspecPair :: IO TestTree
 hspecPair = testSpec "Pair tests:" $ do

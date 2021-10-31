@@ -1,18 +1,17 @@
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE StandaloneDeriving    #-}
-{-# LANGUAGE TemplateHaskell       #-}
 
 module Test.T1Annotated where
 import HW2.T1 (Annotated ((:#)), mapAnnotated)
+import Hedgehog (Gen, Property, discover)
+import Test.Common (compProp, genInt, idProp)
 import Test.Hspec
 import Test.Tasty
-import Test.Tasty.Hspec
-import Test.Common (genInt, idProp, compProp)
-import Hedgehog (Gen, Property, discover)
 import Test.Tasty.Hedgehog (testProperty)
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Annotated e a)
-deriving instance _ => Eq (Annotated e a)
+deriving instance ((Show a, Show e)) => Show (Annotated e a)
+deriving instance ((Eq a, Eq e)) => Eq (Annotated e a)
 
 hspecAnnotated :: IO TestTree
 hspecAnnotated = testSpec "Annotated tests:" $ do

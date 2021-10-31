@@ -2,17 +2,17 @@
 {-# LANGUAGE StandaloneDeriving    #-}
 
 module Test.T1Option(hspecOption, propOption) where
-import HW2.T1 (Option (Some, None), mapOption)
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hspec
+import HW2.T1 (Option (None, Some), mapOption)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import Test.Common
+import Test.Hspec
+import Test.Tasty
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 
-deriving instance _ => Show (Option a)
-deriving instance _ => Eq (Option a)
+deriving instance (Show a) => Show (Option a)
+deriving instance (Eq a) => Eq (Option a)
 
 
 hspecOption :: IO TestTree

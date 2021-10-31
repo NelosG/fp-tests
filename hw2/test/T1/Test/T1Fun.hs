@@ -1,10 +1,10 @@
 module Test.T1Fun where
 import HW2.T1 (Fun (F), mapFun)
+import Hedgehog
 import Test.Hspec
 import Test.Tasty
-import Test.Tasty.Hspec
-import Hedgehog
 import Test.Tasty.Hedgehog
+import Test.Tasty.Hspec
 import Text.Show (Show)
 
 data Function a b = Fn (a -> a) String
