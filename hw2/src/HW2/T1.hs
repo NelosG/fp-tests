@@ -1,27 +1,49 @@
-module HW2.T1 where
+module HW2.T1
+       ( Option (..),
+       Pair (..),
+       Quad (..),
+       Annotated (..),
+       Except (..),
+       Prioritised (..),
+       Stream (..),
+       List (..),
+       Fun (..),
+       Tree (..),
+       mapOption,
+       mapPair,
+       mapQuad,
+       mapAnnotated,
+       mapExcept,
+       mapPrioritised,
+       mapStream,
+       mapList,
+       mapFun,
+       mapTree
+       ) where
 
-data Option a = None | Some a
 
-data Pair a = P a a
+data Option a = None | Some a deriving (Show)
 
-data Quad a = Q a a a a
+data Pair a = P a a deriving (Show)
 
-data Annotated e a = a :# e
+data Quad a = Q a a a a deriving (Show)
+
+data Annotated e a = a :# e deriving (Show)
 infix 0 :#
 
-data Except e a = Error e | Success a
+data Except e a = Error e | Success a deriving (Show)
 
-data Prioritised a = Low a | Medium a | High a
+data Prioritised a = Low a | Medium a | High a deriving (Show)
 
-data Stream a = a :> Stream a
+data Stream a = a :> Stream a deriving (Show)
 infixr 5 :>
 
-data List a = Nil | a :. List a
+data List a = Nil | a :. List a deriving (Show)
 infixr 5 :.
 
 data Fun i a = F (i -> a)
 
-data Tree a = Leaf | Branch (Tree a) a (Tree a)
+data Tree a = Leaf | Branch (Tree a) a (Tree a) deriving (Show)
 
 
 mapOption      :: (a -> b) -> (Option a -> Option b)
@@ -40,6 +62,6 @@ mapTree        :: (a -> b) -> (Tree a -> Tree b)
 
 -- This property is witnessed by the following laws:
 
---          mapF id  ≡  id
+-- mapF id  ≡  id
 -- mapF f ∘ mapF g   ≡  mapF (f ∘ g)
 -- You must implement these functions by hand, without using any predefined functions (not even from Prelude) or deriving.
