@@ -1,4 +1,5 @@
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE QuantifiedConstraints #-}
+{-# LANGUAGE RankNTypes            #-}
 module Test.Common
   where
 
@@ -45,12 +46,7 @@ idProp genF wrapF mapF distF = property $ do
     leftIdIso (distF (wrapF (), q)) === q
 
 -- this is fine.
-allProps :: (Show (m String)
-  , Show (m (String, String))
-  , Show (m ((String, String), String))
-  , Eq (m String)
-  , Eq (m (String, String))
-  , Eq (m ((String, String), String))) =>
+allProps :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
      String
   -> Gen (m String)
   -> (forall a b.(a -> b) -> m a -> m b)
