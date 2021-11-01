@@ -12,7 +12,7 @@ import Test.Tasty.Hedgehog
 genString :: Gen String
 genString = Gen.string (Range.linear 1 100) Gen.alpha
 
-homProp :: (Show (m (String, String)), Eq (m (String, String))) =>
+homProp :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
      (forall a.a -> m a)
   -> (forall a b.(m a, m b) -> m (a, b))
   -> Property
@@ -21,7 +21,7 @@ homProp wrapF distF = property $ do
     j <- forAll genString
     distF (wrapF i, wrapF j) === wrapF (i, j) -- No isomorphisms apply
 
-assocProp :: (Show (m String), Show (m ((String, String), String)), Eq (m ((String, String), String))) =>
+assocProp :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
      Gen (m String)
   -> (forall a b.(a -> b) -> m a -> m b)
   -> (forall a b.(m a, m b) -> m (a, b))
