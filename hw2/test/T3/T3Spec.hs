@@ -6,6 +6,7 @@ import Test.TExcept
 import Test.TList
 import Test.TOption
 import Test.Tasty (TestTree, testGroup)
+import Test.TFun
 
 
 tests :: IO TestTree
@@ -14,5 +15,5 @@ tests = do
     annotated <- hspecAnnotated
     except <- hspecExcept
     list <- hspecList
-    -- fun <- funProp
-    return $ testGroup "HW2.T3" [option, annotated, except, list]
+    fun <- hspecFun
+    return $ testGroup "HW2.T3" [option, annotated, except, list, fun]
