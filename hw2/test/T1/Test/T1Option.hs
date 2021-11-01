@@ -1,5 +1,4 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Test.T1Option(hspecOption, propOption) where
 import HW2.T1 (Option (None, Some), mapOption)

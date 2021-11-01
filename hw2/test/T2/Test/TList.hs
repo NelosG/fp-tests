@@ -1,5 +1,3 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TList where
-
