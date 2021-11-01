@@ -25,18 +25,18 @@ hspecList = testSpec "List tests:" $ do
         let m = k :. (k :. Nil)
         let res = l += l :: List Int
         it "Base test" $ joinList (joinList m) `shouldBe` res
-        it "\"joinF (mapF joinF m)  ≡  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
-        it "\"joinF      (wrapF m)  ≡  m\" test" $ joinList (wrapList m) `shouldBe` m
-        it "\"joinF (mapF wrapF m)  ≡  m\" test" $ joinList (mapList wrapList m) `shouldBe` m
+        it "\"joinF (mapF joinF m)  =  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
+        it "\"joinF      (wrapF m)  =  m\" test" $ joinList (wrapList m) `shouldBe` m
+        it "\"joinF (mapF wrapF m)  =  m\" test" $ joinList (mapList wrapList m) `shouldBe` m
     describe "Nill tests:" $ do
         let m = Nil :: List (List (List Int))
         it "Base test" $ joinList (joinList m) `shouldBe` Nil
-        it "\"joinF (mapF joinF m)  ≡  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
-        it "\"joinF      (wrapF m)  ≡  m\" test" $ joinList (wrapList m) `shouldBe` m
-        it "\"joinF (mapF wrapF m)  ≡  m\" test" $ joinList (mapList wrapList m) `shouldBe` m
+        it "\"joinF (mapF joinF m)  =  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
+        it "\"joinF      (wrapF m)  =  m\" test" $ joinList (wrapList m) `shouldBe` m
+        it "\"joinF (mapF wrapF m)  =  m\" test" $ joinList (mapList wrapList m) `shouldBe` m
     describe "List of Nills tests:" $ do
         let m = ((Nil :. (Nil :. Nil)) :. ((Nil :. (Nil :. Nil)) :. Nil)) :: List (List (List Int))
         it "Base test" $ joinList (joinList m) `shouldBe` Nil
-        it "\"joinF (mapF joinF m)  ≡  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
-        it "\"joinF      (wrapF m)  ≡  m\" test" $ joinList (wrapList m) `shouldBe` m
-        it "\"joinF (mapF wrapF m)  ≡  m\" test" $ joinList (mapList wrapList m) `shouldBe` m
+        it "\"joinF (mapF joinF m)  =  joinF (joinF m)\" test" $ joinList (mapList joinList m) `shouldBe` joinList (joinList m)
+        it "\"joinF      (wrapF m)  =  m\" test" $ joinList (wrapList m) `shouldBe` m
+        it "\"joinF (mapF wrapF m)  =  m\" test" $ joinList (mapList wrapList m) `shouldBe` m

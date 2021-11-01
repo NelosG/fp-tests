@@ -31,12 +31,12 @@ hspecFun = testSpec "Fun tests:" $ do
     let l = F (+ 1)
     it "Base test" $ test (joinFun (joinFun m)) "joinFun (joinFun m)" l "F (+ 1)"
 
-    it "\"joinF (mapF joinF m)  ≡  joinF (joinF m)\" test" $ test (joinFun (mapFun joinFun m)) "joinFun (mapFun joinFun m)"
+    it "\"joinF (mapF joinF m)  =  joinF (joinF m)\" test" $ test (joinFun (mapFun joinFun m)) "joinFun (mapFun joinFun m)"
                                                                   (joinFun (joinFun m)) "joinFun (joinFun m)"
 
-    it "\"joinF      (wrapF m)  ≡  m\" test" $ test (joinFun (mapFun wrapFun l)) "joinFun (mapFun wrapFun l)"
+    it "\"joinF      (wrapF m)  =  m\" test" $ test (joinFun (mapFun wrapFun l)) "joinFun (mapFun wrapFun l)"
                                                     l "l"
 
-    it "\"joinF (mapF wrapF m)  ≡  m\" test" $ test (joinFun (wrapFun l)) "joinFun (mapFun wrapFun l)"
+    it "\"joinF (mapF wrapF m)  =  m\" test" $ test (joinFun (wrapFun l)) "joinFun (mapFun wrapFun l)"
                                                     l "l"
 
