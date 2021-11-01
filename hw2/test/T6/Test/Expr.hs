@@ -17,6 +17,9 @@ deriving instance Eq Expr
 deriving instance Eq ParseError
 deriving instance (Eq e, Eq a) => Eq (Except e a)
 
+genValInt :: Gen Expr
+genValInt = Val . fromIntegral <$> Gen.int (Range.linear 0 10)
+
 genVal :: Gen Expr
 genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 0 100)
 -- genVal = Val <$> Gen.double (Range.linearFrac 0 100)
@@ -46,7 +49,7 @@ genSpaces :: Gen Int -> Gen String
 genSpaces genN = do
   n <- genN
   return $ replicate n ' '
-  
+
 showBuilder' :: Expr -> Expr -> String -> Gen String -> Gen Int -> Gen String
 showBuilder' a b op genSpaces genParen = do
   [s1, s2, s3, s4] <- replicateM 4 genSpaces
@@ -62,7 +65,7 @@ showBuilder (Op (Sub a b)) = showBuilder' a b "-"
 showBuilder (Op (Mul a b)) = showBuilder' a b "*"
 showBuilder (Op (Div a b)) = showBuilder' a b "/"
 showBuilder _ = error "unreachable"
-  
+
 showFull :: Expr -> Gen String
 showFull e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1)
 
@@ -107,3 +110,30 @@ genExprPriority = do
 
 showPriority :: Expr -> Gen String
 showPriority e = showBuilder e (genSpaces $ Gen.constant 1) (Gen.constant 0)
+
+genExprPriorityAssoc' :: Int -> Int -> Gen Expr
+genExprPriorityAssoc' 0 _ = genValInt
+genExprPriorityAssoc' depth thresh
+  | depth <= thresh = genOps Mul
+  | otherwise = genOps Add
+  where
+    genOps :: OpCtr -> Gen Expr
+    genOps op =
+      let nextExpr = genExprPriorityAssoc' (depth - 1) thresh
+      in fmap Op $ op <$> nextExpr <*> nextExpr
+
+genExprPriorityAssoc :: Gen Expr
+genExprPriorityAssoc = do
+  depth <- Gen.int $ Range.linear 1 7
+  thresh <- Gen.int $ Range.linear 0 depth
+  genExprPriorityAssoc' depth thresh
+
+evalExpr' :: (Double -> Double -> Double) -> Expr -> Expr -> Double
+evalExpr' f a b = f (evalExpr a) (evalExpr b)
+
+evalExpr :: Expr -> Double
+evalExpr (Val x) = x
+evalExpr (Op (Add a b)) = evalExpr' (+) a b
+evalExpr (Op (Sub a b)) = evalExpr' (-) a b
+evalExpr (Op (Div a b)) = evalExpr' (/) a b
+evalExpr (Op (Mul a b)) = evalExpr' (*) a b
