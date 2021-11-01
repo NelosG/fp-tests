@@ -15,9 +15,8 @@ deriving instance ((Eq a, Eq e)) => Eq (Annotated e a)
 
 hspecAnnotated :: IO TestTree
 hspecAnnotated = testSpec "Annotated tests:" $ do
-    describe "Annotated tests:" $ do
-        it "Annotated test" $ mapAnnotated (+ 1) (1 :# "hell") `shouldBe` (2 :# "hell")
-        it "Annotated(f . g) test" $ (mapAnnotated (+ 1) . mapAnnotated (* 10)) (1 :# "hell") `shouldBe` (11 :# "hell")
+    it "Annotated test" $ mapAnnotated (+ 1) (1 :# "hell") `shouldBe` (2 :# "hell")
+    it "Annotated(f . g) test" $ (mapAnnotated (+ 1) . mapAnnotated (* 10)) (1 :# "hell") `shouldBe` (11 :# "hell")
 
 genAnnotated :: Gen (Annotated Int Int)
 genAnnotated = (:#) <$> genInt <*> genInt

@@ -15,9 +15,8 @@ deriving instance (Eq a) => Eq (Pair a)
 
 hspecPair :: IO TestTree
 hspecPair = testSpec "Pair tests:" $ do
-    describe "Pair tests:" $ do
-        it "Pair test" $ mapPair (+ 1) (P 1 2) `shouldBe` P 2 3
-        it "Pair(f . g) test" $ (mapPair (+ 1) . mapPair (* 10)) (P 1 2) `shouldBe` P 11 21
+    it "Pair test" $ mapPair (+ 1) (P 1 2) `shouldBe` P 2 3
+    it "Pair(f . g) test" $ (mapPair (+ 1) . mapPair (* 10)) (P 1 2) `shouldBe` P 11 21
 
 genPair :: Gen (Pair Int)
 genPair = P <$> genInt <*> genInt

@@ -2,7 +2,7 @@
 {-# LANGUAGE StandaloneDeriving    #-}
 
 module Test.T1List(hspecList, propList) where
-import HW2.T1 (List (..), mapList)
+import HW2.T1 (List (Nil, (:.)), mapList)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range

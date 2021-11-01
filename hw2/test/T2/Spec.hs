@@ -1,7 +1,8 @@
 import T2Spec
 
-import Test.Tasty
+import Test.Tasty (defaultMain, testGroup)
 
 main :: IO ()
--- main = tests >>= \test -> defaultMain test
-main = print "hello"
+main = do
+  test <- tests
+  defaultMain test

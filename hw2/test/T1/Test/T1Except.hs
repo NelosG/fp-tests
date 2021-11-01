@@ -19,9 +19,10 @@ hspecExcept = testSpec "Except tests:" $ do
     describe "Error tests:" $ do
         it "Error test" $ mapExcept (+ 1) (Error "bad news") `shouldBe` Error "bad news"
         it "Error(f . g) test" $ (mapExcept (+ 1) . mapExcept (* 10)) (Error "bad news") `shouldBe` Error "bad news"
-    -- describe "Success tests:" $ do
-    --     it "Success test" $ mapExcept (+ 1) (Success 1) `shouldBe` Success 2
-    --     it "Success(f . g) test" $ (mapExcept (+ 1) . mapExcept (* 10)) (Success 1) `shouldBe` Success 11
+    describe "Success tests:" $ do
+        let m = Success 1 :: Except String Int
+        it "Success test" $ mapExcept (+ 1) m `shouldBe` Success 2
+        it "Success(f . g) test" $ (mapExcept (+ 1) . mapExcept (* 10)) m `shouldBe` Success 11
 
 genExcept :: Gen (Except Int Int)
 genExcept = Gen.choice [genError, genSuccess]

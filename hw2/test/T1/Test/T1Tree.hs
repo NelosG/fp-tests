@@ -37,10 +37,9 @@ tFromListIns ins = foldr' ins Leaf
 
 hspecTree :: IO TestTree
 hspecTree = testSpec "Tree tests:" $ do
-    describe "Tree tests:" $ do
-        it "Tree test1" $ mapTree (+ 1) (tFromList [1, 2, 3]) `shouldBe` tFromList [2, 3, 4]
-        it "Tree test2" $ mapTree (+ 1) (tFromListIns tInsertSec [1, 2, 3]) `shouldBe` tFromListIns tInsertSec [2, 3, 4]
-        it "Tree(f . g) test" $ (mapTree (+ 1) . mapTree (* 10)) (tFromList [1, 2, 3]) `shouldBe` tFromList [11, 21, 31]
+      it "Tree test1" $ mapTree (+ 1) (tFromList [1, 2, 3]) `shouldBe` tFromList [2, 3, 4]
+      it "Tree test2" $ mapTree (+ 1) (tFromListIns tInsertSec [1, 2, 3]) `shouldBe` tFromListIns tInsertSec [2, 3, 4]
+      it "Tree(f . g) test" $ (mapTree (+ 1) . mapTree (* 10)) (tFromList [1, 2, 3]) `shouldBe` tFromList [11, 21, 31]
 
 genTree :: Gen (Tree Int)
 genTree = Gen.choice [Gen.constant Leaf, genBranch]

@@ -87,6 +87,16 @@ test-suite t2
   main-is: Spec.hs
   other-modules:
       T2Spec
+      Test.Common
+      Test.TAnnotated
+      Test.TExcept
+      Test.TFun
+      Test.TList
+      Test.TOption
+      Test.TPair
+      Test.TPrioritised
+      Test.TQuad
+      Test.TStream
       Paths_hw2
   hs-source-dirs:
       test/T2
@@ -107,6 +117,12 @@ test-suite t3
   main-is: Spec.hs
   other-modules:
       T3Spec
+      Test.Common
+      Test.TAnnotated
+      Test.TExcept
+      Test.TFun
+      Test.TList
+      Test.TOption
       Paths_hw2
   hs-source-dirs:
       test/T3
