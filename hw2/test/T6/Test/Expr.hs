@@ -37,7 +37,7 @@ instance (Show e, Show a) => Show (Except e a) where
   show (Success a) = show a
 
 genValInt :: Gen Expr
-genValInt = Val . fromIntegral <$> Gen.int (Range.linear 0 10)
+genValInt = Val . fromIntegral <$> Gen.int (Range.linear 1 10)
 
 genVal :: Gen Expr
 genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 0 100)
@@ -147,12 +147,34 @@ genExprPriorityAssoc = do
   thresh <- Gen.int $ Range.linear 0 depth
   genExprPriorityAssoc' depth thresh
 
-evalExpr' :: (Double -> Double -> Double) -> Expr -> Expr -> Double
-evalExpr' f a b = f (evalExpr a) (evalExpr b)
+evalExprInt' :: (Double -> Double -> Double) -> Expr -> Expr -> Double
+evalExprInt' f a b = fromIntegral $ (`mod` 133711) . round $ f (evalExprInt a) (evalExprInt b)
 
-evalExpr :: Expr -> Double
-evalExpr (Val x) = x
-evalExpr (Op (Add a b)) = evalExpr' (+) a b
-evalExpr (Op (Sub a b)) = evalExpr' (-) a b
-evalExpr (Op (Div a b)) = evalExpr' (/) a b
-evalExpr (Op (Mul a b)) = evalExpr' (*) a b
+evalExprInt :: Expr -> Double
+evalExprInt (Val x) = x
+evalExprInt (Op (Add a b)) = evalExprInt' (+) a b
+evalExprInt (Op (Sub a b)) = evalExprInt' (-) a b
+evalExprInt (Op (Div a b)) = evalExprInt' (/) a b
+evalExprInt (Op (Mul a b)) = evalExprInt' (*) a b
+
+
+convertToLeftAssoc :: Expr -> Expr
+convertToLeftAssoc = convertToLeftAssoc' id
+
+convertToLeftAssoc' :: (Expr -> Expr) -> Expr -> Expr
+convertToLeftAssoc' b v@(Val _) = b v
+convertToLeftAssoc' b (Op (Add l r)) =
+  let left = convertToLeftAssoc' b l
+  in case r of
+    (Op (Mul _ _)) -> Op $ Add left $ convertToLeftAssoc' id r
+    (Op (Div _ _ )) -> Op $ Add left $ convertToLeftAssoc' id r
+    _ -> convertToLeftAssoc' (Op . Add left) r
+convertToLeftAssoc' b (Op (Mul l r)) =
+  let left = convertToLeftAssoc' b l
+  in convertToLeftAssoc' (Op . Mul left) r
+convertToLeftAssoc' b (Op (Sub l r)) =
+  let left = convertToLeftAssoc' b l
+  in Op $ Sub left (convertToLeftAssoc' id r)
+convertToLeftAssoc' b (Op (Div l r)) =
+  let left = convertToLeftAssoc' b l
+  in Op $ Div left (convertToLeftAssoc' id r)

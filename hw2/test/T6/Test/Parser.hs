@@ -19,7 +19,14 @@ valueExprProp genExpr showExprGen = property $ do
   e <- forAll genExpr
   es <- forAll $ showExprGen e
   let (Success re) = parseExpr es
-  round (evalExpr re) === round (evalExpr e)
+  round (evalExprInt re) === round (evalExprInt e)
+
+sameLeftAssocExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
+sameLeftAssocExprProp genExpr showExprGen = property $ do
+  e <- forAll genExpr
+  es <- forAll $ showExprGen e
+  let (Success re) = parseExpr es
+  convertToLeftAssoc re === convertToLeftAssoc e
 
 propParser :: IO TestTree
 propParser = return $
@@ -32,4 +39,5 @@ propParser = return $
     , testProperty "Sub. No parenthesis" $ sameExprProp (genExprBamboo [Sub]) showBamboo
     , testProperty "Div. No parenthesis" $ sameExprProp (genExprBamboo [Div]) showBamboo
     , testProperty "Sub Div. No parenthesis" $ sameExprProp genExprPriority showPriority
-    , testProperty "Add Mul. No parenthesis" $ valueExprProp genExprPriorityAssoc showPriority ]
+    , testProperty "Add Mul by value. No parenthesis" $ valueExprProp genExprPriorityAssoc showPriority ]
+    -- , testProperty "Add Mul. No parenthesis" $ sameLeftAssocExprProp genExprPriorityAssoc showPriority ]
