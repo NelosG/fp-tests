@@ -117,6 +117,7 @@ test-suite t3
   main-is: Spec.hs
   other-modules:
       T3Spec
+      Test.Common
       Test.TAnnotated
       Test.TExcept
       Test.TFun
