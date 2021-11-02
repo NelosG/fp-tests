@@ -1,5 +1,4 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Test.T1Quad(hspecQuad, propQuad) where
 import HW2.T1 (Quad (Q), mapQuad)

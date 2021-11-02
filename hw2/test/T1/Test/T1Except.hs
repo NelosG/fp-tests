@@ -1,5 +1,4 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Test.T1Except where
 import HW2.T1 (Except (Error, Success), mapExcept)

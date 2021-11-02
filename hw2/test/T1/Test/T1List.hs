@@ -1,5 +1,4 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 module Test.T1List(hspecList, propList) where
 import HW2.T1 (List (Nil, (:.)), mapList)
