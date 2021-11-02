@@ -17,6 +17,25 @@ deriving instance Eq Expr
 deriving instance Eq ParseError
 deriving instance (Eq e, Eq a) => Eq (Except e a)
 
+instance Show ParseError where
+  show (ErrorAtPos n) = "at position: " ++ show n
+
+instance Show Expr where
+  show (Val x) = show x
+  show (Op e) = show e
+
+instance Show a => Show (Prim a) where
+  show (Add x y) = "(" ++ show x ++ " + " ++ show y ++ ")"
+  show (Sub x y) = "(" ++ show x ++ " - " ++ show y ++ ")"
+  show (Mul x y) = "(" ++ show x ++ " * " ++ show y ++ ")"
+  show (Div x y) = "(" ++ show x ++ " / " ++ show y ++ ")"
+  show (Abs x) = show "abs(" ++ show x ++ ")"
+  show (Sgn x) = show "signum(" ++ show x ++ ")"
+
+instance (Show e, Show a) => Show (Except e a) where
+  show (Error e)   = "ERROR: " ++ show e
+  show (Success a) = show a
+
 genValInt :: Gen Expr
 genValInt = Val . fromIntegral <$> Gen.int (Range.linear 0 10)
 
