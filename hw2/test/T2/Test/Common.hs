@@ -43,7 +43,9 @@ idProp genF wrapF mapF distF = property $ do
     p <- forAll genF
     q <- forAll genF
     let leftIdIso = mapF $ \((), a) -> a
+    let rightIdIso = mapF $ \(a, ()) -> a
     leftIdIso (distF (wrapF (), q)) === q
+    rightIdIso (distF (p, wrapF ())) === p
 
 -- this is fine.
 allProps :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
@@ -56,5 +58,5 @@ allProps :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =
 allProps name genF mapF wrapF distF = testGroup (name ++ " properties") [
     testProperty (name ++ " homomorphism") $ homProp wrapF distF
   , testProperty (name ++ " associativity") $ assocProp genF mapF distF
-  , testProperty (name ++ " associativity") $ idProp genF wrapF mapF distF
+  , testProperty (name ++ " left/right identity") $ idProp genF wrapF mapF distF
   ]
