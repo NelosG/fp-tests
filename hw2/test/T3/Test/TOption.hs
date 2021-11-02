@@ -1,11 +1,14 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
-module Test.TOption where
+module Test.TOption
+  where
 
 import HW2.T1 (Option (None, Some), mapOption)
 import HW2.T2
 import HW2.T3
+import Hedgehog
+import qualified Hedgehog.Gen as Gen
+import Test.Common
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hspec
@@ -13,6 +16,15 @@ import Test.Tasty.Hspec
 deriving instance (Show a) => Show (Option a)
 deriving instance (Eq a) => Eq (Option a)
 
+
+propOption :: TestTree
+propOption = allProps "Option" genOption mapOption wrapOption distOption joinOption
+
+genOption :: Gen (Option String)
+genOption = Gen.choice [genNone, genSome]
+  where
+    genNone = Gen.constant None
+    genSome = Some <$> genString
 
 hspecOption :: IO TestTree
 hspecOption = testSpec "Option tests:" $ do

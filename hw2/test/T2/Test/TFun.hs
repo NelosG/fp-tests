@@ -1,2 +1,2 @@
-module Test.TFun where
-
+module Test.TFun
+  where

@@ -1,6 +1,13 @@
-module T2Spec where
+module T2Spec
+  where
 
 import Test.TAnnotated
+import Test.TExcept
+import Test.TList
+import Test.TOption
+import Test.TPair
+import Test.TPrioritised
+import Test.TQuad
 import Test.Tasty (TestTree, testGroup)
 
 
@@ -16,4 +23,4 @@ tests = do
     -- list <- hspecList
     -- fun <- funProp
     -- tree <- hspecTree
-    return $ testGroup "HW2.T2" []
+    return $ testGroup "HW2.T2" [propAnnotated, propExcept, propList, propOption, propPair, propPrioritised, propQuad]

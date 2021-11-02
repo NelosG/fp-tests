@@ -1,11 +1,14 @@
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
-module Test.TExcept where
+module Test.TExcept
+  where
 
 import HW2.T1 (Except (Error, Success), mapExcept)
 import HW2.T2
 import HW2.T3
+import Hedgehog
+import qualified Hedgehog.Gen as Gen
+import Test.Common
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hspec
@@ -42,3 +45,12 @@ hspecExcept = testSpec "Except tests:" $ do
         it "\"joinF (mapF joinF m)  =  joinF (joinF m)\" test" $ joinExcept (mapExcept joinExcept m) `shouldBe` joinExcept (joinExcept m)
         it "\"joinF      (wrapF m)  =  m\" test" $ joinExcept (wrapExcept m) `shouldBe` m
         it "\"joinF (mapF wrapF m)  =  m\" test" $ joinExcept (mapExcept wrapExcept m) `shouldBe` m
+
+propExcept :: TestTree
+propExcept = allProps "Except" genExcept mapExcept wrapExcept distExcept joinExcept
+
+genExcept :: Gen (Except String String)
+genExcept = Gen.choice [genError, genSuccess]
+  where
+    genError = Error <$> genString
+    genSuccess = Success <$> genString

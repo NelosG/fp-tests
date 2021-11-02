@@ -1,26 +1,62 @@
-module Test.Common where
+{-# LANGUAGE QuantifiedConstraints #-}
+{-# LANGUAGE RankNTypes            #-}
+module Test.Common
+  where
 
-import Hedgehog (Gen, Property, forAll, property, (===))
+import Hedgehog (Gen, Property, diff, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
+import Test.Tasty
+import Test.Tasty.Hedgehog
 
-genInt :: Gen Int
-genInt = Gen.int $ Range.linear 1 100
+genString :: Gen String
+genString = Gen.string (Range.linear 1 100) Gen.alpha
 
-idProp :: ((Show (m Int), Eq (m Int))) => Gen (m Int)
-  -> ((Int -> Int) -> (m Int -> m Int))
+homProp :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
+     (forall a.a -> m a)
+  -> (forall a b.(m a, m b) -> m (a, b))
   -> Property
-idProp gen mapM = property $ do
-    m <- forAll gen
-    mapM id m === m
+homProp wrapF distF = property $ do
+    i <- forAll genString
+    j <- forAll genString
+    distF (wrapF i, wrapF j) === wrapF (i, j) -- No isomorphisms apply
 
-compProp :: ((Show (m Int), Eq (m Int))) => Gen (m Int)
-  -> ((Int -> Int) -> (m Int -> m Int))
+assocProp :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
+     Gen (m String)
+  -> (forall a b.(a -> b) -> m a -> m b)
+  -> (forall a b.(m a, m b) -> m (a, b))
   -> Property
-compProp gen mapM = property $ do
-  m <- forAll gen
-  let check f g = (mapM f . mapM g) m === mapM (f . g) m
-  check (+2) (+2)
-  check (+2) (*3)
-  check (*3) (+2)
-  check (*3) (*3)
+assocProp genF mapF distF = property $ do
+    p <- forAll genF
+    q <- forAll genF
+    r <- forAll genF
+    let assocIso = mapF $ \(a, (b, c)) -> ((a, b), c)
+    assocIso (distF (p, distF (q, r))) === distF (distF (p, q), r)
+
+idProp :: (Show (m String), Eq (m String)) =>
+     Gen (m String)
+  -> (forall a.a -> m a)
+  -> (forall a b.(a -> b) -> m a -> m b)
+  -> (forall a b.(m a, m b) -> m (a, b))
+  -> Property
+idProp genF wrapF mapF distF = property $ do
+    p <- forAll genF
+    q <- forAll genF
+    let leftIdIso = mapF $ \((), a) -> a
+    let rightIdIso = mapF $ \(a, ()) -> a
+    leftIdIso (distF (wrapF (), q)) === q
+    rightIdIso (distF (p, wrapF ())) === p
+
+-- this is fine.
+allProps :: (forall t.(Show t) => (Show (m t)), forall t.(Eq t) => (Eq (m t))) =>
+     String
+  -> Gen (m String)
+  -> (forall a b.(a -> b) -> m a -> m b)
+  -> (forall a.a -> m a)
+  -> (forall a b.(m a, m b) -> m (a, b))
+  -> TestTree
+allProps name genF mapF wrapF distF = testGroup (name ++ " properties") [
+    testProperty (name ++ " homomorphism") $ homProp wrapF distF
+  , testProperty (name ++ " associativity") $ assocProp genF mapF distF
+  , testProperty (name ++ " left/right identity") $ idProp genF wrapF mapF distF
+  ]
