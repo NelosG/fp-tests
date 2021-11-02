@@ -39,4 +39,3 @@ hspecFun = testSpec "Fun tests:" $ do
 
     it "\"joinF (mapF wrapF m)  =  m\" test" $ test (joinFun (wrapFun l)) "joinFun (mapFun wrapFun l)"
                                                     l "l"
-
