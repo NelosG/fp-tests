@@ -4,29 +4,45 @@ import HW2.T6
 import Test.Expr
 import Test.Tasty
 import Test.Tasty.Hedgehog
-import Hedgehog (Gen, Property, forAll, (===), property)
+import Hedgehog (Gen, Property, forAll, (===), property, failure, success)
 import HW2.T4 (Expr, Prim(..))
-import HW2.T1 (Except(Success))
+import HW2.T1 (Except(..))
 
 sameExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-sameExprProp genExpr showExprGen = property $ do
-  e <- forAll genExpr
+sameExprProp exprGen showExprGen = property $ do
+  e <- forAll exprGen
   es <- forAll $ showExprGen e
-  parseExpr es === Success e
+  case parseExpr es of
+    (Success re) -> re === e
+    (Error _) -> failure
 
 valueExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-valueExprProp genExpr showExprGen = property $ do
-  e <- forAll genExpr
+valueExprProp exprGen showExprGen = property $ do
+  e <- forAll exprGen
   es <- forAll $ showExprGen e
-  let (Success re) = parseExpr es
-  round (evalExprInt re) === round (evalExprInt e)
+  case parseExpr es of
+    (Success re) ->
+      round (evalExprInt re) === round (evalExprInt e)
+    (Error _) -> failure
 
 sameLeftAssocExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-sameLeftAssocExprProp genExpr showExprGen = property $ do
-  e <- forAll genExpr
+sameLeftAssocExprProp exprGen showExprGen = property $ do
+  e <- forAll exprGen
   es <- forAll $ showExprGen e
-  let (Success re) = parseExpr es
-  convertToLeftAssoc re === convertToLeftAssoc e
+  case parseExpr es of
+    (Success re) ->
+      convertToLeftAssoc re === convertToLeftAssoc e
+    (Error _) -> failure
+  
+
+invalidExpr :: Gen Expr -> (Expr -> Gen String) -> Property
+invalidExpr exprGen showExprGen = property $ do
+  e <- forAll exprGen
+  es <- forAll $ showExprGen e
+  case parseExpr es of
+    (Success _) -> failure
+    (Error _) -> success
+ 
 
 propParser :: IO TestTree
 propParser = return $
@@ -39,5 +55,8 @@ propParser = return $
     , testProperty "Sub. No parenthesis" $ sameExprProp (genExprBamboo [Sub]) showBamboo
     , testProperty "Div. No parenthesis" $ sameExprProp (genExprBamboo [Div]) showBamboo
     , testProperty "Sub Div. No parenthesis" $ sameExprProp genExprPriority showPriority
-    , testProperty "Add Mul by value. No parenthesis" $ valueExprProp genExprPriorityAssoc showPriority ]
-    -- , testProperty "Add Mul. No parenthesis" $ sameLeftAssocExprProp genExprPriorityAssoc showPriority ]
+    , testProperty "Add Mul by value. No parenthesis" $ valueExprProp genExprPriorityAssoc showPriority
+    , testProperty "Add Mul. No parenthesis" $ sameLeftAssocExprProp genExprPriorityAssoc showPriority
+    , testProperty "Add Mul. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul]) showMinGen
+    , testProperty "Add Mul Div Sub. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul, Div, Sub]) showMinGen
+    , testProperty "Add Mul Div Sub. Invalid expression" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) showInvalidExpr ]
