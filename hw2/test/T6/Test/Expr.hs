@@ -74,19 +74,18 @@ genSpaces genN = do
   n <- genN
   return $ replicate n ' '
 
-showBuilder' :: Expr -> Expr -> String -> Gen String -> Gen Int -> Gen Bool -> Gen String
-showBuilder' a b op genSpaces genParen genInvalid = do
+showBuilder' :: Expr -> Expr -> String -> Gen String -> Gen Int -> Gen String
+showBuilder' a b op genSpaces genParen = do
   [s1, s2, s3, s4, sParen] <- replicateM 5 genSpaces
   bNum <- genParen
-  as <- showBuilder a genSpaces genParen genInvalid
-  bs <- showBuilder b genSpaces genParen genInvalid
-  [e1, e2, e3, e4, e5, e6, e7, e8, eBegin, eEnd] <- map (bool "" "LOL") <$> replicateM 10 genInvalid
-  return $ eBegin ++ intercalate sParen (replicate bNum "(")
-    ++ e1 ++ s1 ++ e2 ++ as ++ e3 ++ s2 ++ e4 ++ op ++ e5 ++ s3 ++ e6 ++ bs ++ e7 ++ s4 ++ e8
-    ++ intercalate sParen (replicate bNum ")") ++ eEnd
+  as <- showBuilder a genSpaces genParen
+  bs <- showBuilder b genSpaces genParen
+  return $ intercalate sParen (replicate bNum "(")
+    ++ s1 ++ as ++ s2 ++ op ++ s3 ++ bs ++ s4
+    ++ intercalate sParen (replicate bNum ")")
 
-showBuilder :: Expr -> Gen String -> Gen Int -> Gen Bool -> Gen String
-showBuilder (Val x)        = \_ _ _ -> return $ showDouble x
+showBuilder :: Expr -> Gen String -> Gen Int -> Gen String
+showBuilder (Val x)        = \_ _ -> return $ showDouble x
 showBuilder (Op (Add a b)) = showBuilder' a b "+"
 showBuilder (Op (Sub a b)) = showBuilder' a b "-"
 showBuilder (Op (Mul a b)) = showBuilder' a b "*"
@@ -94,10 +93,10 @@ showBuilder (Op (Div a b)) = showBuilder' a b "/"
 showBuilder _              = error "unreachable"
 
 showFull :: Expr -> Gen String
-showFull e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1) (Gen.constant False)
+showFull e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1)
 
 showExtra :: Expr -> Gen String
-showExtra e = showBuilder e (genSpaces $ Gen.int $ Range.linear 0 2) (Gen.int $ Range.linear 1 2) (Gen.constant False)
+showExtra e = showBuilder e (genSpaces $ Gen.int $ Range.linear 0 2) (Gen.int $ Range.linear 1 2)
 
 genExprBamboo' :: Int -> [OpCtr] -> Gen Expr
 genExprBamboo' 0 _ = genVal
@@ -112,7 +111,7 @@ genExprBamboo ops = do
   genExprBamboo' depth ops
 
 showBamboo :: Expr -> Gen String
-showBamboo e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 0) (Gen.constant False)
+showBamboo e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 0)
 
 -- ((((1 - 2) - (3 / 4 / 5)) - 6) - 7)
 genExprPriority' :: Int -> Int -> Int -> Gen Expr
@@ -136,7 +135,7 @@ genExprPriority = do
   genExprPriority' left middle right
 
 showPriority :: Expr -> Gen String
-showPriority e = showBuilder e (genSpaces $ Gen.constant 1) (Gen.constant 0) (Gen.constant False)
+showPriority e = showBuilder e (genSpaces $ Gen.constant 1) (Gen.constant 0)
 
 genExprPriorityAssoc' :: Int -> Int -> Gen Expr
 genExprPriorityAssoc' 0 _ = genValInt
@@ -227,8 +226,43 @@ showMin (Op (Div l r)) = showMin'
 showMinGen :: Expr -> Gen String
 showMinGen = Gen.constant . showMin
 
-showInvalidExpr :: Expr -> Gen String
-showInvalidExpr e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1) Gen.bool_
+
+data InvalidVariant = MissingParen
+                    | ExtraWord
+                    | MissingOperand
+                    | MissingOperation
+  deriving (Eq)
+
+showInvalid' :: Expr -> Expr -> String -> InvalidVariant -> Gen String
+showInvalid' a b op invalidVariant = do
+  let
+    doExtraWord = invalidVariant == ExtraWord
+    doSkipParen = invalidVariant == MissingParen
+    doSkipOperand = invalidVariant == MissingOperand
+    doSkipOperation = invalidVariant == MissingOperation
+  as <- showInvalid a invalidVariant
+  bs <- showInvalid b invalidVariant
+  extraPos <- bool (Gen.constant 0) (Gen.int (Range.constant 1 6)) doExtraWord
+  skipParen <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipParen
+  skipOperand <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipOperand
+  let (eBeg:eRest) = map (bool "" "LOL" . (==extraPos)) [1..6]
+  return $ eBeg ++ concat (zipWith (++)
+                           [ bool "" "(" (skipParen /= 2)
+                           , bool "" as (skipOperand /= 2)
+                           , bool op "" doSkipOperation
+                           , bool "" bs (skipOperand /= 1)
+                           , bool "" ")" (skipParen /= 1) ] eRest)
+
+showInvalid :: Expr -> InvalidVariant -> Gen String
+showInvalid (Val x)        = \_ ->return $ showDouble x
+showInvalid (Op (Add a b)) = showInvalid' a b "+"
+showInvalid (Op (Sub a b)) = showInvalid' a b "-"
+showInvalid (Op (Mul a b)) = showInvalid' a b "*"
+showInvalid (Op (Div a b)) = showInvalid' a b "/"
+showInvalid _              = error "unreachable"
+
+showInvalidExpr :: InvalidVariant -> Expr -> Gen String
+showInvalidExpr invalidVariant e = showInvalid e invalidVariant
 
 genExprInvalid :: [OpCtr] -> Gen Expr
-genExprInvalid = genExprBuilder (Gen.int $ Range.linear 2 5) False
+genExprInvalid = genExprBuilder (Gen.int $ Range.linear 1 5) False
