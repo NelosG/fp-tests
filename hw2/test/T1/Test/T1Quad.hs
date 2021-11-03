@@ -1,6 +1,9 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Quad(hspecQuad, propQuad) where
+module Test.T1Quad
+  ( hspecQuad
+  , propQuad
+  ) where
 import HW2.T1 (Quad (Q), mapQuad)
 import Hedgehog
 import Test.Common
@@ -21,7 +24,4 @@ genQuad :: Gen (Quad Int)
 genQuad = Q <$> genInt <*> genInt <*> genInt <*> genInt
 
 propQuad :: TestTree
-propQuad = testGroup "Quad properties" [
-    testProperty "Quad id property" $ idProp genQuad mapQuad
-  , testProperty "Quad composition property" $ compProp genQuad mapQuad
-  ]
+propQuad = allProps "Quad" genQuad mapQuad

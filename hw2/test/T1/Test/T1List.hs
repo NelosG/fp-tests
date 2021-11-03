@@ -1,6 +1,9 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1List(hspecList, propList) where
+module Test.T1List
+  ( hspecList
+  , propList
+  ) where
 import HW2.T1 (List (Nil, (:.)), mapList)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
@@ -34,7 +37,4 @@ genList = listFromStdList <$> genList'
     genList' = Gen.list (Range.linear 1 100) genInt
 
 propList :: TestTree
-propList = testGroup "List properties" [
-    testProperty "List id property" $ idProp genList mapList
-  , testProperty "List composition property" $ compProp genList mapList
-  ]
+propList = allProps "List" genList mapList

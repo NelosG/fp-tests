@@ -1,9 +1,10 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Annotated where
+module Test.T1Annotated
+  where
 import HW2.T1 (Annotated ((:#)), mapAnnotated)
 import Hedgehog (Gen, Property, discover)
-import Test.Common (compProp, genInt, idProp)
+import Test.Common (allProps, compProp, genInt, idProp)
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hedgehog (testProperty)
@@ -21,7 +22,4 @@ genAnnotated :: Gen (Annotated Int Int)
 genAnnotated = (:#) <$> genInt <*> genInt
 
 propAnnotated :: TestTree
-propAnnotated = testGroup "Annotated properties" [
-    testProperty "Annotated id property" $ idProp genAnnotated mapAnnotated
-  , testProperty "Annotated composition property" $ compProp genAnnotated mapAnnotated
-  ]
+propAnnotated = allProps "Annotated" genAnnotated mapAnnotated
