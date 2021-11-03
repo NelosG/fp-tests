@@ -1,12 +1,12 @@
 module Test.Parser where
 
+import HW2.T1 (Except (..))
+import HW2.T4 (Expr, Prim (..))
 import HW2.T6
+import Hedgehog (Gen, Property, failure, forAll, property, success, (===))
 import Test.Expr
 import Test.Tasty
 import Test.Tasty.Hedgehog
-import Hedgehog (Gen, Property, forAll, (===), property, failure, success)
-import HW2.T4 (Expr, Prim(..))
-import HW2.T1 (Except(..))
 
 sameExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
 sameExprProp exprGen showExprGen = property $ do
@@ -14,7 +14,7 @@ sameExprProp exprGen showExprGen = property $ do
   es <- forAll $ showExprGen e
   case parseExpr es of
     (Success re) -> re === e
-    (Error _) -> failure
+    (Error _)    -> failure
 
 valueExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
 valueExprProp exprGen showExprGen = property $ do
@@ -33,7 +33,7 @@ sameLeftAssocExprProp exprGen showExprGen = property $ do
     (Success re) ->
       convertToLeftAssoc re === convertToLeftAssoc e
     (Error _) -> failure
-  
+
 
 invalidExpr :: Gen Expr -> (Expr -> Gen String) -> Property
 invalidExpr exprGen showExprGen = property $ do
@@ -41,8 +41,8 @@ invalidExpr exprGen showExprGen = property $ do
   es <- forAll $ showExprGen e
   case parseExpr es of
     (Success _) -> failure
-    (Error _) -> success
- 
+    (Error _)   -> success
+
 
 propParser :: IO TestTree
 propParser = return $

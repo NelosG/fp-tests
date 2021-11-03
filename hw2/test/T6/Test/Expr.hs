@@ -1,18 +1,18 @@
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments     #-}
+{-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE StandaloneDeriving #-}
 module Test.Expr where
 
+import Control.Monad (replicateM)
+import Data.Bool (bool)
+import Data.List (intercalate)
+import HW2.T1 (Except (..))
+import HW2.T4 (Expr (..), Prim (..))
+import HW2.T6 (ParseError (..))
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
-import HW2.T4 (Expr(..), Prim(..))
-import HW2.T1 (Except(..))
-import HW2.T6 (ParseError(..))
 import Numeric (showFFloat)
-import Control.Monad (replicateM)
-import Data.List (intercalate)
-import Data.Bool (bool)
 
 
 deriving instance (Eq a) => Eq (Prim a)
@@ -25,15 +25,15 @@ instance Show ParseError where
 
 instance Show Expr where
   show (Val x) = show x
-  show (Op e) = show e
+  show (Op e)  = show e
 
 instance Show a => Show (Prim a) where
   show (Add x y) = "(" ++ show x ++ " + " ++ show y ++ ")"
   show (Sub x y) = "(" ++ show x ++ " - " ++ show y ++ ")"
   show (Mul x y) = "(" ++ show x ++ " * " ++ show y ++ ")"
   show (Div x y) = "(" ++ show x ++ " / " ++ show y ++ ")"
-  show (Abs x) = show "abs(" ++ show x ++ ")"
-  show (Sgn x) = show "signum(" ++ show x ++ ")"
+  show (Abs x)   = show "abs(" ++ show x ++ ")"
+  show (Sgn x)   = show "signum(" ++ show x ++ ")"
 
 instance (Show e, Show a) => Show (Except e a) where
   show (Error e)   = "ERROR: " ++ show e
@@ -86,12 +86,12 @@ showBuilder' a b op genSpaces genParen genInvalid = do
     ++ intercalate sParen (replicate bNum ")") ++ eEnd
 
 showBuilder :: Expr -> Gen String -> Gen Int -> Gen Bool -> Gen String
-showBuilder (Val x) = \_ _ _ -> return $ showDouble x
+showBuilder (Val x)        = \_ _ _ -> return $ showDouble x
 showBuilder (Op (Add a b)) = showBuilder' a b "+"
 showBuilder (Op (Sub a b)) = showBuilder' a b "-"
 showBuilder (Op (Mul a b)) = showBuilder' a b "*"
 showBuilder (Op (Div a b)) = showBuilder' a b "/"
-showBuilder _ = error "unreachable"
+showBuilder _              = error "unreachable"
 
 showFull :: Expr -> Gen String
 showFull e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1) (Gen.constant False)
@@ -124,9 +124,9 @@ genExprPriority' left middle right = do
   return $ replaceMostLeft eRight $ eLeft - eMiddle
     where
       replaceMostLeft :: Expr -> Expr -> Expr
-      replaceMostLeft v@(Val _) _ = v
+      replaceMostLeft v@(Val _) _                = v
       replaceMostLeft (Op (Sub (Val _) r)) subst = subst - r
-      replaceMostLeft (Op (Sub l r)) subst = replaceMostLeft l subst - r
+      replaceMostLeft (Op (Sub l r)) subst       = replaceMostLeft l subst - r
 
 genExprPriority :: Gen Expr
 genExprPriority = do
@@ -159,7 +159,7 @@ evalExprInt' :: (Double -> Double -> Double) -> Expr -> Expr -> Double
 evalExprInt' f a b = fromIntegral $ (`mod` 133711) . round $ f (evalExprInt a) (evalExprInt b)
 
 evalExprInt :: Expr -> Double
-evalExprInt (Val x) = x
+evalExprInt (Val x)        = x
 evalExprInt (Op (Add a b)) = evalExprInt' (+) a b
 evalExprInt (Op (Sub a b)) = evalExprInt' (-) a b
 evalExprInt (Op (Div a b)) = evalExprInt' (/) a b
@@ -175,13 +175,13 @@ convertToLeftAssoc' b (Op (Add l r)) =
   let
     left =
       case l of
-        (Op (Mul _ _)) -> b $ convertToLeftAssoc' id l
+        (Op (Mul _ _))  -> b $ convertToLeftAssoc' id l
         (Op (Div _ _ )) -> b $ convertToLeftAssoc' id l
-        _ -> convertToLeftAssoc' b l
+        _               -> convertToLeftAssoc' b l
   in case r of
-    (Op (Mul _ _)) -> Op $ Add left $ convertToLeftAssoc' id r
+    (Op (Mul _ _))  -> Op $ Add left $ convertToLeftAssoc' id r
     (Op (Div _ _ )) -> Op $ Add left $ convertToLeftAssoc' id r
-    _ -> convertToLeftAssoc' (Op . Add left) r
+    _               -> convertToLeftAssoc' (Op . Add left) r
 convertToLeftAssoc' b (Op (Mul l r)) =
   let left = convertToLeftAssoc' b l
   in convertToLeftAssoc' (Op . Mul left) r
@@ -189,9 +189,9 @@ convertToLeftAssoc' b (Op (Sub l r)) =
   let
     left =
       case l of
-        (Op (Mul _ _)) -> b $ convertToLeftAssoc' id l
+        (Op (Mul _ _))  -> b $ convertToLeftAssoc' id l
         (Op (Div _ _ )) -> b $ convertToLeftAssoc' id l
-        _ -> convertToLeftAssoc' b l
+        _               -> convertToLeftAssoc' b l
   in Op $ Sub left (convertToLeftAssoc' id r)
 convertToLeftAssoc' b (Op (Div l r)) =
   let left = convertToLeftAssoc' b l
@@ -210,7 +210,7 @@ wrapAddSub' :: Expr -> Wrapper
 wrapAddSub' = \case
   (Op (Add _ _)) -> wrapParen
   (Op (Sub _ _)) -> wrapParen
-  _ -> id
+  _              -> id
 
 showMin :: Expr -> String
 showMin (Val v) = showDouble v
@@ -221,7 +221,7 @@ showMin (Op (Div l r)) = showMin'
   (wrapAddSub' l)
   case r of
     (Val _) -> id
-    _ -> wrapParen
+    _       -> wrapParen
   l r "/"
 
 showMinGen :: Expr -> Gen String
