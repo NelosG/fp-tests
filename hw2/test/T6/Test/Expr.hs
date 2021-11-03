@@ -16,9 +16,13 @@ import Numeric (showFFloat)
 
 
 deriving instance (Eq a) => Eq (Prim a)
-deriving instance Eq Expr
 deriving instance Eq ParseError
 deriving instance (Eq e, Eq a) => Eq (Except e a)
+
+instance Eq Expr where
+  (Val a) == (Val b) = abs (a - b) < 0.0000001
+  (Op p) == (Op q)   = p == q
+  (==) _ _           = False
 
 instance Show ParseError where
   show (ErrorAtPos n) = "at position: " ++ show n
