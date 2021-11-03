@@ -14,14 +14,9 @@ import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import Numeric (showFFloat)
 
-roundN :: Int -> Double -> Double
-roundN n = read . flip (showFFloat (Just n)) ""
 
 deriving instance (Eq a) => Eq (Prim a)
-instance Eq Expr where
-    (Val l) == (Val r) = roundN 5 l == roundN 5 r
-    (Op l) == (Op r) = l == r
-    _ == _ = False
+deriving instance Eq Expr
 deriving instance Eq ParseError
 deriving instance (Eq e, Eq a) => Eq (Except e a)
 
@@ -48,7 +43,8 @@ genValInt :: Gen Expr
 genValInt = Val . fromIntegral <$> Gen.int (Range.linear 1 10)
 
 genVal :: Gen Expr
-genVal = Val <$> Gen.double (Range.linearFrac 0 100)
+genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 0 100)
+-- genVal = Val <$> Gen.double (Range.linearFrac 0 100)
 
 type OpCtr = Expr -> Expr -> Prim Expr
 
