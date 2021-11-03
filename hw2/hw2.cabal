@@ -91,6 +91,10 @@ test-suite t2
       Test.TAnnotated
       Test.TExcept
       Test.TFun
+      Test.TFun.Assoc
+      Test.TFun.Data
+      Test.TFun.Homo
+      Test.TFun.Ident
       Test.TList
       Test.TOption
       Test.TPair
