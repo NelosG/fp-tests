@@ -59,4 +59,8 @@ propParser = return $
     , testProperty "Add Mul. No parenthesis" $ sameLeftAssocExprProp genExprPriorityAssoc showPriority
     , testProperty "Add Mul. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul]) showMinGen
     , testProperty "Add Mul Div Sub. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul, Div, Sub]) showMinGen
-    , testProperty "Add Mul Div Sub. Invalid expression" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) showInvalidExpr ]
+    , testProperty "Add Mul Div Sub. Invalid expression. Extra words" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr ExtraWord 
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing parenthesis" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingParen
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operand" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperand 
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperation
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr FakeOperation ]
