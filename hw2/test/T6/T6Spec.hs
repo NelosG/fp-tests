@@ -1,7 +1,7 @@
 module T6Spec where
 
-import Test.Tasty
-import Test.Parser
+import Test.Parser (propParser)
+import Test.Tasty (TestTree, testGroup)
 
 tests :: IO TestTree
 tests = do

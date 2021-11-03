@@ -1,7 +1,24 @@
 {-# LANGUAGE BlockArguments     #-}
 {-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE StandaloneDeriving #-}
-module Test.Expr where
+
+module Test.Expr
+  ( InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen)
+  , convertToLeftAssoc
+  , evalExprInt
+  , genExpr
+  , genExprBamboo
+  , genExprInvalid
+  , genExprPriority
+  , genExprPriorityAssoc
+  , genVal
+  , showBamboo
+  , showExtra
+  , showFull
+  , showInvalidExpr
+  , showMinGen
+  , showPriority
+  ) where
 
 import Control.Monad (replicateM)
 import Data.Bool (bool)
@@ -9,11 +26,10 @@ import Data.List (intercalate)
 import HW2.T1 (Except (..))
 import HW2.T4 (Expr (..), Prim (..))
 import HW2.T6 (ParseError (..))
-import Hedgehog
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import Numeric (showFFloat)
-
 
 deriving instance (Eq a) => Eq (Prim a)
 deriving instance Eq ParseError
@@ -117,7 +133,7 @@ genExprBamboo ops = do
 showBamboo :: Expr -> Gen String
 showBamboo e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 0)
 
--- ((((1 - 2) - (3 / 4 / 5)) - 6) - 7)
+-- | ((((1 - 2) - (3 / 4 / 5)) - 6) - 7)
 genExprPriority' :: Int -> Int -> Int -> Gen Expr
 genExprPriority' 0 _ _ = genVal
 genExprPriority' left middle right = do
@@ -130,6 +146,7 @@ genExprPriority' left middle right = do
       replaceMostLeft v@(Val _) _                = v
       replaceMostLeft (Op (Sub (Val _) r)) subst = subst - r
       replaceMostLeft (Op (Sub l r)) subst       = replaceMostLeft l subst - r
+      replaceMostLeft _ _                        = undefined
 
 genExprPriority :: Gen Expr
 genExprPriority = do
@@ -167,7 +184,7 @@ evalExprInt (Op (Add a b)) = evalExprInt' (+) a b
 evalExprInt (Op (Sub a b)) = evalExprInt' (-) a b
 evalExprInt (Op (Div a b)) = evalExprInt' (/) a b
 evalExprInt (Op (Mul a b)) = evalExprInt' (*) a b
-
+evalExprInt _              = undefined
 
 convertToLeftAssoc :: Expr -> Expr
 convertToLeftAssoc = convertToLeftAssoc' id
@@ -199,7 +216,7 @@ convertToLeftAssoc' b (Op (Sub l r)) =
 convertToLeftAssoc' b (Op (Div l r)) =
   let left = convertToLeftAssoc' b l
   in Op $ Div left (convertToLeftAssoc' id r)
-
+convertToLeftAssoc' _ _ = undefined
 
 type Wrapper = (String -> String)
 
@@ -226,10 +243,10 @@ showMin (Op (Div l r)) = showMin'
     (Val _) -> id
     _       -> wrapParen
   l r "/"
+showMin _ = undefined
 
 showMinGen :: Expr -> Gen String
 showMinGen = Gen.constant . showMin
-
 
 data InvalidVariant = MissingParen
                     | ExtraWord
@@ -252,12 +269,13 @@ showInvalid' a b op invalidVariant = do
   skipParen <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipParen
   skipOperand <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipOperand
   let (eBeg:eRest) = map (bool "" "LOL" . (==extraPos)) [1..6]
-  return $ eBeg ++ concat (zipWith (++)
-                           [ bool "" "(" (skipParen /= 2)
-                           , bool "" as (skipOperand /= 2)
-                           , bool (bool op "$" doFakeOperation) "" doSkipOperation
-                           , bool "" bs (skipOperand /= 1)
-                           , bool "" ")" (skipParen /= 1) ] eRest)
+  return $ eBeg ++ concat (zipWith (++) [
+                        bool "" "(" (skipParen /= 2)
+                        , bool "" as (skipOperand /= 2)
+                        , bool (bool op "$" doFakeOperation) "" doSkipOperation
+                        , bool "" bs (skipOperand /= 1)
+                        , bool "" ")" (skipParen /= 1) ]
+                           eRest)
 
 showInvalid :: Expr -> InvalidVariant -> Gen String
 showInvalid (Val x)        = \_ ->return $ showDouble x

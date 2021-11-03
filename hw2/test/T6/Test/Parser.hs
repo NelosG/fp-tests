@@ -1,12 +1,17 @@
-module Test.Parser where
+module Test.Parser
+  ( propParser
+  ) where
 
 import HW2.T1 (Except (..))
 import HW2.T4 (Expr, Prim (..))
-import HW2.T6
+import HW2.T6 (parseExpr)
 import Hedgehog (Gen, Property, failure, forAll, property, success, (===))
-import Test.Expr
-import Test.Tasty
-import Test.Tasty.Hedgehog
+import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen),
+                  convertToLeftAssoc, evalExprInt, genExpr, genExprBamboo, genExprInvalid,
+                  genExprPriority, genExprPriorityAssoc, genVal, showBamboo, showExtra, showFull,
+                  showInvalidExpr, showMinGen, showPriority)
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.Hedgehog (testProperty)
 
 sameExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
 sameExprProp exprGen showExprGen = property $ do
@@ -34,7 +39,6 @@ sameLeftAssocExprProp exprGen showExprGen = property $ do
       convertToLeftAssoc re === convertToLeftAssoc e
     (Error _) -> failure
 
-
 invalidExpr :: Gen Expr -> (Expr -> Gen String) -> Property
 invalidExpr exprGen showExprGen = property $ do
   e <- forAll exprGen
@@ -42,7 +46,6 @@ invalidExpr exprGen showExprGen = property $ do
   case parseExpr es of
     (Success _) -> failure
     (Error _)   -> success
-
 
 propParser :: IO TestTree
 propParser = return $
@@ -59,8 +62,8 @@ propParser = return $
     , testProperty "Add Mul. No parenthesis" $ sameLeftAssocExprProp genExprPriorityAssoc showPriority
     , testProperty "Add Mul. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul]) showMinGen
     , testProperty "Add Mul Div Sub. Minimum parenthesis" $ sameLeftAssocExprProp (genExpr [Add, Mul, Div, Sub]) showMinGen
-    , testProperty "Add Mul Div Sub. Invalid expression. Extra words" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr ExtraWord 
+    , testProperty "Add Mul Div Sub. Invalid expression. Extra words" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr ExtraWord
     , testProperty "Add Mul Div Sub. Invalid expression. Missing parenthesis" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingParen
-    , testProperty "Add Mul Div Sub. Invalid expression. Missing operand" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperand 
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operand" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperand
     , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperation
     , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr FakeOperation ]
