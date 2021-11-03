@@ -1,6 +1,9 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Option(hspecOption, propOption) where
+module Test.T1Option
+  ( hspecOption
+  , propOption
+  ) where
 import HW2.T1 (Option (None, Some), mapOption)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
@@ -30,7 +33,4 @@ genOption = Gen.choice [genNone, genSome]
     genSome = Some <$> genInt
 
 propOption :: TestTree
-propOption = testGroup "Option properties" [
-    testProperty "Option id property" $ idProp genOption mapOption
-  , testProperty "Option composition property" $ compProp genOption mapOption
-  ]
+propOption = allProps "Option" genOption mapOption

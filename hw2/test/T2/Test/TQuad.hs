@@ -15,7 +15,7 @@ deriving instance (Show a) => Show (Quad a)
 deriving instance (Eq a) => Eq (Quad a)
 
 propQuad :: TestTree
-propQuad = allProps "Quad" genQuad mapQuad wrapQuad distQuad
+propQuad = allProps "Quad" genString genQuad mapQuad wrapQuad distQuad
 
 genQuad :: Gen (Quad String)
 genQuad = Q <$> genString <*> genString <*> genString <*> genString

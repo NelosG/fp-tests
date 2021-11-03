@@ -15,7 +15,7 @@ deriving instance (Show a) => Show (Pair a)
 deriving instance (Eq a) => Eq (Pair a)
 
 propPair :: TestTree
-propPair = allProps "Pair" genPair mapPair wrapPair distPair
+propPair = allProps "Pair" genString genPair mapPair wrapPair distPair
 
 genPair :: Gen (Pair String)
 genPair = P <$> genString <*> genString

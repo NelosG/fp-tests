@@ -1,6 +1,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Pair where
+module Test.T1Pair
+  where
 import HW2.T1 (Pair (P), mapPair)
 import Hedgehog
 import Test.Common
@@ -21,7 +22,4 @@ genPair :: Gen (Pair Int)
 genPair = P <$> genInt <*> genInt
 
 propPair :: TestTree
-propPair = testGroup "Pair properties" [
-    testProperty "Pair id property" $ idProp genPair mapPair
-  , testProperty "Pair composition property" $ compProp genPair mapPair
-  ]
+propPair = allProps "Pair" genPair mapPair

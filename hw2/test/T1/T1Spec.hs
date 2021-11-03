@@ -1,4 +1,5 @@
-module T1Spec where
+module T1Spec
+  where
 import Test.T1Annotated (hspecAnnotated, propAnnotated)
 import Test.T1Except (hspecExcept, propExcept)
 import Test.T1Option (hspecOption, propOption)
@@ -26,4 +27,4 @@ tests = do
     fun <- funProp
     tree <- hspecTree
     return $ testGroup "HW2.T1" [option, pair, quad, annotated, except, prioritised, list, fun, tree,
-     propAnnotated, propExcept, propList, propOption, propPair, propPrioritised, propQuad, propTree]
+     propAnnotated, propExcept, propList, propOption, propPair, propPrioritised, propQuad, propTree, propFun]

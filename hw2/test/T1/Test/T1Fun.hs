@@ -1,6 +1,10 @@
-module Test.T1Fun where
+{-# LANGUAGE FlexibleInstances #-}
+module Test.T1Fun
+  where
 import HW2.T1 (Fun (F), mapFun)
 import Hedgehog
+import qualified Hedgehog.Gen as Gen
+import Test.Common
 import Test.Hspec
 import Test.Tasty
 import Test.Tasty.Hedgehog
@@ -41,3 +45,17 @@ testFG = testProperty "Fun test1" $ property $ do
 
 funProp :: IO TestTree
 funProp = return $ testGroup "Fun tests:" [test1, test2, testFG]
+
+instance Eq a => Eq (Fun Int a) where
+  (==) (F f1) (F f2) = map f1 [-10..10] == map f2 [-10..10]
+
+instance Show a => Show (Fun Int a) where
+  show (F f) = "f([-10..10])=" ++ show (map f [-10..10])
+
+genFun :: Gen (Fun Int Int)
+genFun = F <$> do
+  op <- Gen.choice [Gen.constant (+), Gen.constant (-), Gen.constant (*)]
+  op <$> genInt
+
+propFun :: TestTree
+propFun = allProps "Fun" genFun mapFun
