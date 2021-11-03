@@ -1,6 +1,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Except where
+module Test.T1Except
+  where
 import HW2.T1 (Except (Error, Success), mapExcept)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
@@ -30,7 +31,4 @@ genExcept = Gen.choice [genError, genSuccess]
     genSuccess = Success <$> genInt
 
 propExcept :: TestTree
-propExcept = testGroup "Except properties" [
-    testProperty "Except id property" $ idProp genExcept mapExcept
-  , testProperty "Except composition property" $ compProp genExcept mapExcept
-  ]
+propExcept = allProps "Except" genExcept mapExcept

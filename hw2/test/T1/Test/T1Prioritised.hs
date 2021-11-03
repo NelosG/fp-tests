@@ -1,6 +1,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Prioritised where
+module Test.T1Prioritised
+  where
 import HW2.T1 (Prioritised (High, Low, Medium), mapPrioritised)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
@@ -31,7 +32,4 @@ genPrioritised = Gen.choice [genLow, genMedium, genHigh]
     genHigh = High <$> genInt
 
 propPrioritised :: TestTree
-propPrioritised = testGroup "Prioritised properties" [
-    testProperty "Prioritised id property" $ idProp genPrioritised mapPrioritised
-  , testProperty "Prioritised composition property" $ compProp genPrioritised mapPrioritised
-  ]
+propPrioritised = allProps "Prioritised" genPrioritised mapPrioritised

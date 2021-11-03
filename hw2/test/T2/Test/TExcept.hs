@@ -13,7 +13,7 @@ deriving instance ((Show a, Show b)) => Show (Except a b)
 deriving instance ((Eq a, Eq b)) => Eq (Except a b)
 
 propExcept :: TestTree
-propExcept = allProps "Except" genExcept mapExcept wrapExcept distExcept
+propExcept = allProps "Except" genString genExcept mapExcept wrapExcept distExcept
 
 genExcept :: Gen (Except String String)
 genExcept = Gen.choice [genError, genSuccess]

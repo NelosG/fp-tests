@@ -1,6 +1,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
-module Test.T1Tree where
+module Test.T1Tree
+  where
 import Data.Foldable
 import HW2.T1 (Tree (Branch, Leaf), mapTree)
 import Hedgehog
@@ -46,7 +47,4 @@ genTree = Gen.choice [Gen.constant Leaf, genBranch]
     genBranch = Branch <$> genTree <*> genInt <*> genTree
 
 propTree :: TestTree
-propTree = testGroup "Tree properties" [
-    testProperty "Tree id property" $ idProp genTree mapTree
-  , testProperty "Tree composition property" $ compProp genTree mapTree
-  ]
+propTree = allProps "Tree" genTree mapTree

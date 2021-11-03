@@ -15,7 +15,7 @@ deriving instance (Show a) => Show (Prioritised a)
 deriving instance (Eq a) => Eq (Prioritised a)
 
 propPrioritised :: TestTree
-propPrioritised = allProps "Prioritised" genPrioritised mapPrioritised wrapPrioritised distPrioritised
+propPrioritised = allProps "Prioritised" genString genPrioritised mapPrioritised wrapPrioritised distPrioritised
 
 genPrioritised :: Gen (Prioritised String)
 genPrioritised = Gen.choice [genLow, genMedium, genHigh]

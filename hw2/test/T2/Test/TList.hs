@@ -15,7 +15,7 @@ deriving instance (Show a) => Show (List a)
 deriving instance (Eq a) => Eq (List a)
 
 propList :: TestTree
-propList = allProps "List" genList mapList wrapList distList
+propList = allProps "List" genString genList mapList wrapList distList
 
 listFromStdList :: [a] -> List a
 listFromStdList = foldr (:.) Nil
