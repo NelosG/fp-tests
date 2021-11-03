@@ -1,15 +1,16 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TPrioritised
-  where
+  ( propPrioritised
+  ) where
 
-import HW2.T1
-import HW2.T2
-import Hedgehog
+import HW2.T1 (Prioritised (..), mapPrioritised)
+import HW2.T2 (distPrioritised, wrapPrioritised)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
-import Test.Common
-import Test.Tasty
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance (Show a) => Show (Prioritised a)
 deriving instance (Eq a) => Eq (Prioritised a)

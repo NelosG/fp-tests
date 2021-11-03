@@ -1,6 +1,6 @@
-import T4Spec
+import T4Spec (tests)
 
-import Test.Tasty
+import Test.Tasty (defaultMain)
 
 main :: IO ()
 main = tests >>= \test -> defaultMain test

@@ -1,16 +1,17 @@
-module T1Spec where
+module T1Spec
+  ( tests
+  ) where
 
-import Hedgehog
+import Hedgehog (Gen, Property, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
-import Test.Hspec
-import Test.Tasty
-import Test.Tasty.Hedgehog
-import Test.Tasty.Hspec
+import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.Hedgehog (testProperty)
+import Test.Tasty.Hspec (testSpec)
 
 import GHC.Natural (Natural)
 import HW1.T1 (Day (..), afterDays, daysToParty, isWeekend, nextDay)
-
 
 instance Eq Day where
     (==) Monday Monday       = True
@@ -49,30 +50,30 @@ afterDaysHelper n d = toEnum $ fromIntegral n + fromEnum d
 
 spec_Days :: Spec
 spec_Days = do
-    describe "nextDay tests" $ do
-        it "nextDay Monday" $ nextDay Monday `shouldBe` Tuesday
-        it "nextDay Tuesday" $ nextDay Tuesday `shouldBe` Wednesday
-        it "nextDay Wednesday" $ nextDay Wednesday `shouldBe` Thursday
-        it "nextDay Thursday" $ nextDay Thursday `shouldBe` Friday
-        it "nextDay Friday" $ nextDay Friday `shouldBe` Saturday
-        it "nextDay Saturday" $ nextDay Saturday `shouldBe` Sunday
-        it "nextDay Sunday" $ nextDay Sunday `shouldBe` Monday
-    describe "isWeekend tests" $ do
-        it "isWeekend Monday" $ isWeekend Monday `shouldBe` False
-        it "isWeekend Tuesday" $ isWeekend Tuesday  `shouldBe` False
-        it "isWeekend Wednesday" $ isWeekend Wednesday `shouldBe` False
-        it "isWeekend Thursday" $ isWeekend Thursday  `shouldBe` False
-        it "isWeekend Friday" $ isWeekend Friday  `shouldBe` False
-        it "isWeekend Saturday" $ isWeekend Saturday `shouldBe` True
-        it "isWeekend Sunday" $ isWeekend Sunday `shouldBe` True
-    describe "daysToParty tests" $ do
-        it "daysToParty Monday" $ daysToParty Monday `shouldBe` 4
-        it "daysToParty Tuesday" $ daysToParty Tuesday `shouldBe` 3
-        it "daysToParty Wednesday" $ daysToParty Wednesday `shouldBe` 2
-        it "daysToParty Thursday" $ daysToParty Thursday  `shouldBe` 1
-        it "daysToParty Friday" $ daysToParty Friday `shouldBe` 0
-        it "daysToParty Saturday" $ daysToParty Saturday `shouldBe` 6
-        it "daysToParty Sunday" $ daysToParty Sunday  `shouldBe` 5
+  describe "nextDay tests" $ do
+    it "nextDay Monday" $ nextDay Monday `shouldBe` Tuesday
+    it "nextDay Tuesday" $ nextDay Tuesday `shouldBe` Wednesday
+    it "nextDay Wednesday" $ nextDay Wednesday `shouldBe` Thursday
+    it "nextDay Thursday" $ nextDay Thursday `shouldBe` Friday
+    it "nextDay Friday" $ nextDay Friday `shouldBe` Saturday
+    it "nextDay Saturday" $ nextDay Saturday `shouldBe` Sunday
+    it "nextDay Sunday" $ nextDay Sunday `shouldBe` Monday
+  describe "isWeekend tests" $ do
+    it "isWeekend Monday" $ isWeekend Monday `shouldBe` False
+    it "isWeekend Tuesday" $ isWeekend Tuesday  `shouldBe` False
+    it "isWeekend Wednesday" $ isWeekend Wednesday `shouldBe` False
+    it "isWeekend Thursday" $ isWeekend Thursday  `shouldBe` False
+    it "isWeekend Friday" $ isWeekend Friday  `shouldBe` False
+    it "isWeekend Saturday" $ isWeekend Saturday `shouldBe` True
+    it "isWeekend Sunday" $ isWeekend Sunday `shouldBe` True
+  describe "daysToParty tests" $ do
+    it "daysToParty Monday" $ daysToParty Monday `shouldBe` 4
+    it "daysToParty Tuesday" $ daysToParty Tuesday `shouldBe` 3
+    it "daysToParty Wednesday" $ daysToParty Wednesday `shouldBe` 2
+    it "daysToParty Thursday" $ daysToParty Thursday  `shouldBe` 1
+    it "daysToParty Friday" $ daysToParty Friday `shouldBe` 0
+    it "daysToParty Saturday" $ daysToParty Saturday `shouldBe` 6
+    it "daysToParty Sunday" $ daysToParty Sunday  `shouldBe` 5
 
 genNatural :: Gen Natural
 genNatural = Gen.integral_ $ Range.linear 0 10000
@@ -82,9 +83,9 @@ genDay = Gen.enumBounded
 
 prop_Days :: Property
 prop_Days = property $ do
-    n <- forAll genNatural
-    d <- forAll genDay
-    afterDays n d === afterDaysHelper n d
+  n <- forAll genNatural
+  d <- forAll genDay
+  afterDays n d === afterDaysHelper n d
 
 hspecDays :: IO TestTree
 hspecDays = testSpec "Days tests" spec_Days
@@ -94,6 +95,6 @@ propertyDays = return $ testProperty "Days afterDays" prop_Days
 
 tests :: IO TestTree
 tests = do
-    unitTests <- hspecDays
-    propTests <- propertyDays
-    return $ testGroup "HW1.T1" [unitTests, propTests]
+  unitTests <- hspecDays
+  propTests <- propertyDays
+  return $ testGroup "HW1.T1" [unitTests, propTests]

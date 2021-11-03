@@ -9,8 +9,8 @@ import Control.Monad (liftM2)
 import Hedgehog (Gen, Property, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
-import Test.Tasty
-import Test.Tasty.Hedgehog
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.Hedgehog (testProperty)
 
 genInt :: Gen Int
 genInt = Gen.int $ Range.linear 1 100
@@ -19,8 +19,8 @@ idProp :: ((Show (m Int), Eq (m Int))) => Gen (m Int)
   -> ((Int -> Int) -> (m Int -> m Int))
   -> Property
 idProp genF mapF = property $ do
-    m <- forAll genF
-    mapF id m === m
+  m <- forAll genF
+  mapF id m === m
 
 compProp :: ((Show (m Int), Eq (m Int))) => Gen (m Int)
   -> ((Int -> Int) -> (m Int -> m Int))

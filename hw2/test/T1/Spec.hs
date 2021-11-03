@@ -1,4 +1,4 @@
-import T1Spec
+import T1Spec (tests)
 
 import Test.Tasty (defaultMain, testGroup)
 

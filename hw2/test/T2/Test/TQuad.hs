@@ -1,15 +1,16 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TQuad
-  where
+  ( propQuad
+  ) where
 
-import HW2.T1
-import HW2.T2
-import Hedgehog
+import HW2.T1 (Quad (..), mapQuad)
+import HW2.T2 (distQuad, wrapQuad)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
-import Test.Common
-import Test.Tasty
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance (Show a) => Show (Quad a)
 deriving instance (Eq a) => Eq (Quad a)

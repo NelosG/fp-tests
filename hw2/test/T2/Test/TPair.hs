@@ -1,15 +1,16 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TPair
-  where
+  ( propPair
+  ) where
 
-import HW2.T1
-import HW2.T2
-import Hedgehog
+import HW2.T1 (Pair (..), mapPair)
+import HW2.T2 (distPair, wrapPair)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
-import Test.Common
-import Test.Tasty
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance (Show a) => Show (Pair a)
 deriving instance (Eq a) => Eq (Pair a)

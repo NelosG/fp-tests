@@ -1,17 +1,18 @@
 {-# LANGUAGE FlexibleInstances #-}
-module Test.TFun.Assoc where
-import HW2.T2
-import HW2.T1
-import Test.Hspec
-import Test.TFun.Data
+
+module Test.TFun.Assoc
+  ( testAssoc
+  ) where
+import HW2.T1 (Fun (..))
+import HW2.T2 (distFun, wrapFun)
+import Test.Hspec (Expectation, shouldBe)
+import Test.TFun.Data (Function (..))
 
 instance (Eq a, Num a) => Eq (Function (a, (a, a))) where
-    (==) (Fn a _) (Fn b _) = a (228, (322, 123)) == b (228, (322, 123))
-
+  (==) (Fn a _) (Fn b _) = a (228, (322, 123)) == b (228, (322, 123))
 
 instance (Show a, Num a) => Show (Function (a, (a, a))) where
-    show (Fn a forShow) = show $ forShow ++ " 228 == " ++ show (a (228, (322, 123)))
-
+  show (Fn a forShow) = show $ forShow ++ " 228 == " ++ show (a (228, (322, 123)))
 
 --If this test fails, then it will generate an incorrect error message (brackets will be placed incorrectly)
 testAssoc :: Expectation
@@ -27,8 +28,5 @@ getFF2 (F a) (x, (y, z)) = swap $ a x
 swap :: ((a, a), a) -> (a, (a, a))
 swap ((a, b), c) = (a, (b, c))
 
-
-
 getFF1 :: Fun a (a, (a, a)) -> (a, (a, a)) -> (a, (a, a))
 getFF1 (F a) (x, (y, z)) = a x
-

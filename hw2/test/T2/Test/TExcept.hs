@@ -1,13 +1,14 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TExcept
-  where
-import HW2.T1
-import HW2.T2
-import Hedgehog
+  ( propExcept
+  ) where
+import HW2.T1 (Except (..), mapExcept)
+import HW2.T2 (distExcept, wrapExcept)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
-import Test.Common
-import Test.Tasty
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance ((Show a, Show b)) => Show (Except a b)
 deriving instance ((Eq a, Eq b)) => Eq (Except a b)

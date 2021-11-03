@@ -1,15 +1,16 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TList
-  where
+  ( propList
+  ) where
 
-import HW2.T1
-import HW2.T2
-import Hedgehog
+import HW2.T1 (List (..), mapList)
+import HW2.T2 (distList, wrapList)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
-import Test.Common
-import Test.Tasty
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance (Show a) => Show (List a)
 deriving instance (Eq a) => Eq (List a)

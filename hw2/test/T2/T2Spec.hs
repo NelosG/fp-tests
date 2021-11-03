@@ -1,16 +1,16 @@
 module T2Spec
-  where
+  ( tests
+  ) where
 
-import Test.TAnnotated
-import Test.TExcept
-import Test.TFun
-import Test.TList
-import Test.TOption
-import Test.TPair
-import Test.TPrioritised
-import Test.TQuad
+import Test.TAnnotated (propAnnotated)
+import Test.TExcept (propExcept)
+import Test.TFun (hspecFun, propFun)
+import Test.TList (propList)
+import Test.TOption (propOption)
+import Test.TPair (propPair)
+import Test.TPrioritised (propPrioritised)
+import Test.TQuad (propQuad)
 import Test.Tasty (TestTree, testGroup)
-
 
 tests :: IO TestTree
 tests = do

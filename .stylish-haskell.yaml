@@ -19,6 +19,11 @@ steps:
   # Align the right hand side of some elements.  This is quite conservative
   # and only applies to statements where each element occupies a single
   # line.
+
+  - module_header:
+      indent: 2
+      sort: true
+      
   - simple_align:
       cases: true
       top_level_patterns: true

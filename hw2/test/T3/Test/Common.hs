@@ -1,14 +1,17 @@
 {-# LANGUAGE QuantifiedConstraints #-}
 {-# LANGUAGE RankNTypes            #-}
+
 module Test.Common
-  where
+  ( allProps
+  , genString
+  ) where
 
 import Data.Kind (Constraint)
-import Hedgehog
+import Hedgehog (Gen, Property, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
-import Test.Tasty
-import Test.Tasty.Hedgehog
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.Hedgehog (testProperty)
 
 genString :: Gen String
 genString = Gen.string (Range.linear 1 100) Gen.alpha

@@ -1,14 +1,14 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.TAnnotated
-  where
+  ( propAnnotated
+  ) where
 
-import HW2.T1
-import HW2.T2
+import HW2.T1 (Annotated (..), mapAnnotated)
+import HW2.T2 (distAnnotated, wrapAnnotated)
 import Hedgehog (Gen)
-import Test.Common
-import Test.Tasty
-import Test.Tasty.Hedgehog
+import Test.Common (allProps, genString)
+import Test.Tasty (TestTree)
 
 deriving instance ((Show a, Show e)) => Show (Annotated e a)
 deriving instance ((Eq a, Eq e)) => Eq (Annotated e a)

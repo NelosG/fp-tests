@@ -1,5 +1,4 @@
 import T5Spec
-
 import Test.Tasty
 
 main :: IO ()
