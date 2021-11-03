@@ -15,7 +15,7 @@ deriving instance (Show a) => Show (Option a)
 deriving instance (Eq a) => Eq (Option a)
 
 propOption :: TestTree
-propOption = allProps "Option" genOption mapOption wrapOption distOption
+propOption = allProps "Option" genString genOption mapOption wrapOption distOption
 
 genOption :: Gen (Option String)
 genOption = Gen.choice [genNone, genSome]

@@ -17,4 +17,4 @@ genAnnotated :: Gen (Annotated String String)
 genAnnotated = (:#) <$> genString <*> genString
 
 propAnnotated :: TestTree
-propAnnotated = allProps "Annotated" genAnnotated mapAnnotated wrapAnnotated distAnnotated
+propAnnotated = allProps "Annotated" genString genAnnotated mapAnnotated wrapAnnotated distAnnotated
