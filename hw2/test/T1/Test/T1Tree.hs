@@ -42,7 +42,7 @@ hspecTree = testSpec "Tree tests:" $ do
       it "Tree(f . g) test" $ (mapTree (+ 1) . mapTree (* 10)) (tFromList [1, 2, 3]) `shouldBe` tFromList [11, 21, 31]
 
 genTree :: Gen (Tree Int)
-genTree = Gen.choice [Gen.constant Leaf, genBranch]
+genTree = Gen.frequency [(2, Gen.constant Leaf), (1, genBranch)]
   where
     genBranch = Branch <$> genTree <*> genInt <*> genTree
 
