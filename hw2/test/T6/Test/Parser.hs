@@ -62,4 +62,5 @@ propParser = return $
     , testProperty "Add Mul Div Sub. Invalid expression. Extra words" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr ExtraWord 
     , testProperty "Add Mul Div Sub. Invalid expression. Missing parenthesis" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingParen
     , testProperty "Add Mul Div Sub. Invalid expression. Missing operand" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperand 
-    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperation ]
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperation
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr FakeOperation ]

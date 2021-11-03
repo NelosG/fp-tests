@@ -230,6 +230,7 @@ showMinGen = Gen.constant . showMin
 data InvalidVariant = MissingParen
                     | ExtraWord
                     | MissingOperand
+                    | FakeOperation
                     | MissingOperation
   deriving (Eq)
 
@@ -240,6 +241,7 @@ showInvalid' a b op invalidVariant = do
     doSkipParen = invalidVariant == MissingParen
     doSkipOperand = invalidVariant == MissingOperand
     doSkipOperation = invalidVariant == MissingOperation
+    doFakeOperation = invalidVariant == FakeOperation
   as <- showInvalid a invalidVariant
   bs <- showInvalid b invalidVariant
   extraPos <- bool (Gen.constant 0) (Gen.int (Range.constant 1 6)) doExtraWord
@@ -249,7 +251,7 @@ showInvalid' a b op invalidVariant = do
   return $ eBeg ++ concat (zipWith (++)
                            [ bool "" "(" (skipParen /= 2)
                            , bool "" as (skipOperand /= 2)
-                           , bool op "" doSkipOperation
+                           , bool (bool op "$" doFakeOperation) "" doSkipOperation
                            , bool "" bs (skipOperand /= 1)
                            , bool "" ")" (skipParen /= 1) ] eRest)
 
