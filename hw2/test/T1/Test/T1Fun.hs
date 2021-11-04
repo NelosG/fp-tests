@@ -7,7 +7,7 @@ module Test.T1Fun
 import HW2.T1 (Fun (F), mapFun)
 import Hedgehog (Gen, property, (===))
 import qualified Hedgehog.Gen as Gen
-import Test.Common (allProps, genInt)
+import Test.Common (allProps, genInt, genFun)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Hedgehog (testProperty)
 import Text.Show (Show)

@@ -28,7 +28,7 @@ deriving instance (Eq a, Eq e) => Eq (Except e a)
 
 hspecBaseTest :: IO TestTree
 hspecBaseTest = testSpec "runES tests:" $ do
-  it "Success test" $ runES (eval (2 + 3 * 5 - 7)) [] `shouldBe` Success (10 :# [Sub 17 7, Add 2 15, Mul 3 5])
+  it "Success test" $ runES (eval ((2 + 3 * 5 - 7) / 2)) [] `shouldBe` Success (5 :# [Div 10 2, Sub 17 7, Add 2 15, Mul 3 5])
   it "Error test" $ runES (eval (1 / (10 - 5 * 2))) [] `shouldBe` Error DivideByZero
 
 tests :: IO TestTree

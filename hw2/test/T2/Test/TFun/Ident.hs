@@ -29,13 +29,8 @@ testIdentLeft :: Expectation
 testIdentLeft = test2 (distFun (wrapFun (), wrapFun 2)) "(distFun (wrapFun (), wrapFun 2))" (wrapFun 2) "(wrapFun 2)"
 
 getF1 :: Fun (a, ()) (a, ()) -> a -> a
-getF1 (F a) x = getFirst (a ( x, ()))
+getF1 (F a) x = fst (a ( x, ()))
 
 getF2 :: Fun ((), a) ((), a) -> a -> a
-getF2 (F a) x = getSecond (a ((), x))
+getF2 (F a) x = snd (a ((), x))
 
-getSecond :: (a, b) -> b
-getSecond (_, b) = b
-
-getFirst :: (a, b) -> a
-getFirst (a, _) = a
