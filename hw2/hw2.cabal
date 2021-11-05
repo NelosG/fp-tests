@@ -148,6 +148,7 @@ test-suite t4
   main-is: Spec.hs
   other-modules:
       T4Spec
+      Test.Expr
       Paths_hw2
   hs-source-dirs:
       test/T4
@@ -168,6 +169,7 @@ test-suite t5
   main-is: Spec.hs
   other-modules:
       T5Spec
+      Test.Expr
       Paths_hw2
   hs-source-dirs:
       test/T5
