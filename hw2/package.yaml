@@ -24,6 +24,7 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies: scientific
 
 executables:
   hw2-exe:
