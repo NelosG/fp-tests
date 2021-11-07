@@ -98,7 +98,8 @@ tests:
     - hspec
     - hedgehog
     - hedgehog-classes
-    - containers  
+    - containers
+    - with-utf8
   t5:
     main:                Spec.hs
     source-dirs:         test/T5
