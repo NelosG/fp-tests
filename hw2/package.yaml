@@ -97,6 +97,7 @@ tests:
     - tasty
     - hspec
     - hedgehog
+    - hedgehog-classes
     - containers  
   t5:
     main:                Spec.hs

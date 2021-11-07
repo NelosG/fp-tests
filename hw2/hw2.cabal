@@ -149,6 +149,7 @@ test-suite t4
   other-modules:
       T4Spec
       Test.Expr
+      Test.State
       Paths_hw2
   hs-source-dirs:
       test/T4
@@ -157,6 +158,7 @@ test-suite t4
       base >=4.7 && <5
     , containers
     , hedgehog
+    , hedgehog-classes
     , hspec
     , hw2
     , tasty
