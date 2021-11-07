@@ -4,8 +4,9 @@
 module T4Spec
   ( tests
   ) where
-import HW2.T1 (Annotated (..))
-import HW2.T4 (Expr (..), Prim (..), State (runS), eval)
+
+import HW2.T1 (Annotated ((:#)))
+import HW2.T4 (Prim (Add, Mul, Sub), State (runS), eval)
 import qualified Hedgehog as H
 import Test.Expr (genFullExpr, stupidEval)
 import Test.Tasty (TestTree, testGroup)

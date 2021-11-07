@@ -1,10 +1,11 @@
 resolver: lts-18.5
 
 packages:
-- hw1
-- hw2
+  - hw1
+  - hw2
 
-extra-deps: []
+extra-deps:
+  - hedgehog-classes-0.2.5.2
 
 flags: {}
 
