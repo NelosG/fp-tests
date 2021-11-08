@@ -39,7 +39,7 @@ genValInt :: Gen Expr
 genValInt = Val . fromIntegral <$> Gen.int (Range.linear 1 10)
 
 genVal :: Gen Expr
-genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 0 100)
+genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 1 100)
 
 type OpCtr = Expr -> Expr -> Prim Expr
 type UnaryOpCtr = Expr -> Prim Expr
