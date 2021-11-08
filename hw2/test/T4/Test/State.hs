@@ -4,8 +4,8 @@ module Test.State
   ( genState
   ) where
 
-import HW2.T1
-import HW2.T4
+import HW2.T1 (Annotated (..))
+import HW2.T4 (State (runS), wrapState)
 import qualified Hedgehog as H
 
 genState :: (H.Gen x) -> (H.Gen (State () x))

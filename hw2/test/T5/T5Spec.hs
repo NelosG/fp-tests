@@ -19,6 +19,10 @@ hspecBaseTest = testSpec "runES tests:" $ do
   it "Success test" $ runES (eval ((2 + 3 * 5 - 7) / 2)) [] `shouldBe` Success (5 :# [Div 10 2, Sub 17 7, Add 2 15, Mul 3 5])
   it "Error test" $ runES (eval (1 / (10 - 5 * 2))) [] `shouldBe` Error DivideByZero
 
+-- | This one is for test tests
+  -- it "Reverse List test" $ runES (eval ((2 + 3) * (7 - 5))) [] `shouldBe` Success (10 :# [Mul 5 2, Add 2 3, Sub 7 5])
+
+
 prop_randomExpr :: H.Property
 prop_randomExpr = H.property $ do
   expr <- H.forAll genFullExpr
