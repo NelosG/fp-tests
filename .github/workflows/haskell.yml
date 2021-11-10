@@ -17,11 +17,8 @@ jobs:
         cache-name: stack-cache
       with:
         path: /home/runner/.stack
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.stack') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+        key: /home/runner/.stack
+        restore-keys: /home/runner/.stack
 
     - name: Run tests
       run: stack test hw2
