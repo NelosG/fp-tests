@@ -1,11 +1,15 @@
+{-# LANGUAGE LambdaCase #-}
 module Test.Parser
   ( propParser
   ) where
 
+import Control.Monad.Morph (hoist)
+import System.Timeout (timeout)
+
 import HW2.T1 (Except (..))
 import HW2.T4 (Expr, Prim (..))
 import HW2.T6 (parseExpr)
-import Hedgehog (Gen, Property, failure, forAll, property, success, (===))
+import Hedgehog (Gen, Property, failure, forAll, property, success, (===), PropertyT, test, TestT)
 import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen),
                   convertToLeftAssoc, evalExprInt, genExpr, genExprBamboo, genExprInvalid,
                   genExprPriority, genExprPriorityAssoc, genVal, showBamboo, showExtra, showFull,
@@ -13,39 +17,57 @@ import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, Miss
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Hedgehog (testProperty)
 
-sameExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-sameExprProp exprGen showExprGen = property $ do
+withTimeout :: Expr -> Int -> PropertyT IO () -> PropertyT IO ()
+withTimeout expr len = hoist errorOut
+  where
+    errorOut :: IO a -> IO a
+    errorOut m = timeout len m >>= \case
+        Just a -> return a
+        Nothing -> ioError . userError $ "Timeout exceeded: " ++ show expr
+
+timedTest :: (Expr -> String -> PropertyT IO ()) -> Gen Expr -> (Expr -> Gen String) -> Property
+timedTest prop exprGen showExprGen = property $ do
   e <- forAll exprGen
   es <- forAll $ showExprGen e
+  withTimeout e (20 * 1000000) (prop e es)
+
+sameExprProp' :: Expr -> String -> PropertyT IO ()
+sameExprProp' e es =
   case parseExpr es of
     (Success re) -> re === e
     (Error _)    -> failure
 
-valueExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-valueExprProp exprGen showExprGen = property $ do
-  e <- forAll exprGen
-  es <- forAll $ showExprGen e
+sameExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
+sameExprProp = timedTest sameExprProp'
+
+valueExprProp' :: Expr -> String -> PropertyT IO ()
+valueExprProp' e es =
   case parseExpr es of
     (Success re) ->
       round (evalExprInt re) === round (evalExprInt e)
     (Error _) -> failure
 
-sameLeftAssocExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
-sameLeftAssocExprProp exprGen showExprGen = property $ do
-  e <- forAll exprGen
-  es <- forAll $ showExprGen e
+valueExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
+valueExprProp = timedTest valueExprProp'
+
+sameLeftAssocExprProp' :: Expr -> String -> PropertyT IO ()
+sameLeftAssocExprProp' e es =
   case parseExpr es of
     (Success re) ->
       convertToLeftAssoc re === convertToLeftAssoc e
     (Error _) -> failure
 
-invalidExpr :: Gen Expr -> (Expr -> Gen String) -> Property
-invalidExpr exprGen showExprGen = property $ do
-  e <- forAll exprGen
-  es <- forAll $ showExprGen e
+sameLeftAssocExprProp :: Gen Expr -> (Expr -> Gen String) -> Property
+sameLeftAssocExprProp = timedTest sameLeftAssocExprProp'
+
+invalidExpr' :: Expr -> String -> PropertyT IO ()
+invalidExpr' e es = 
   case parseExpr es of
     (Success _) -> failure
     (Error _)   -> success
+
+invalidExpr :: Gen Expr -> (Expr -> Gen String) -> Property
+invalidExpr = timedTest invalidExpr'
 
 propParser :: IO TestTree
 propParser = return $

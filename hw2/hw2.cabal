@@ -205,6 +205,7 @@ test-suite t6
     , hedgehog
     , hspec
     , hw2
+    , mmorph
     , tasty
     , tasty-hedgehog
     , tasty-hspec
