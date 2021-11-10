@@ -9,7 +9,7 @@ import System.Timeout (timeout)
 import HW2.T1 (Except (..))
 import HW2.T4 (Expr, Prim (..))
 import HW2.T6 (parseExpr)
-import Hedgehog (Gen, Property, failure, forAll, property, success, (===), PropertyT, test, TestT)
+import Hedgehog (Gen, Property, failure, forAll, property, success, (===), PropertyT)
 import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen),
                   convertToLeftAssoc, evalExprInt, genExpr, genExprBamboo, genExprInvalid,
                   genExprPriority, genExprPriorityAssoc, genVal, showBamboo, showExtra, showFull,
@@ -17,19 +17,19 @@ import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, Miss
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Hedgehog (testProperty)
 
-withTimeout :: Expr -> Int -> PropertyT IO () -> PropertyT IO ()
+withTimeout :: String -> Int -> PropertyT IO () -> PropertyT IO ()
 withTimeout expr len = hoist errorOut
   where
     errorOut :: IO a -> IO a
     errorOut m = timeout len m >>= \case
         Just a -> return a
-        Nothing -> ioError . userError $ "Timeout exceeded: " ++ show expr
+        Nothing -> ioError . userError $ "Timeout exceeded: " ++ expr
 
 timedTest :: (Expr -> String -> PropertyT IO ()) -> Gen Expr -> (Expr -> Gen String) -> Property
 timedTest prop exprGen showExprGen = property $ do
   e <- forAll exprGen
   es <- forAll $ showExprGen e
-  withTimeout e (20 * 1000000) (prop e es)
+  withTimeout es (20 * 1000000) (prop e es)
 
 sameExprProp' :: Expr -> String -> PropertyT IO ()
 sameExprProp' e es =
