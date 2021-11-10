@@ -1,4 +1,4 @@
-name: Haskell CI
+name: HW2
 
 on:
   push:
