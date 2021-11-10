@@ -1,4 +1,5 @@
 {-# LANGUAGE BlockArguments     #-}
+{-# LANGUAGE FlexibleInstances  #-}
 {-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
@@ -10,7 +11,7 @@ module Test.Expr
 
 import Control.Monad (replicateM)
 import Data.Bool (bool)
-import Data.List (intercalate)
+import Data.List (intercalate, sort)
 import HW2.T1 (Annotated (..))
 import HW2.T4 (Expr (..), Prim (..))
 import Hedgehog (Gen)
@@ -18,9 +19,30 @@ import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import Numeric (showFFloat)
 
-deriving instance (Eq a) => Eq (Prim a)
-deriving instance Eq Expr
-deriving instance (Eq a, Eq e) => Eq (Annotated e a)
+instance Eq (Prim Double) where
+  (==) (Add a b) (Add c d) = (isNaN a && isNaN c || a == c) && (isNaN b && isNaN d || b == d)
+  (==) (Sub a b) (Sub c d) = (isNaN a && isNaN c || a == c) && (isNaN b && isNaN d || b == d)
+  (==) (Mul a b) (Mul c d) = (isNaN a && isNaN c || a == c) && (isNaN b && isNaN d || b == d)
+  (==) (Div a b) (Div c d) = (isNaN a && isNaN c || a == c) && (isNaN b && isNaN d || b == d)
+
+  (==) (Abs a) (Abs b)     = isNaN a && isNaN b || a == b
+  (==) (Sgn a) (Sgn b)     = isNaN a && isNaN b || a == b
+
+  (==) _ _                 = False
+
+deriving instance Eq (Prim Expr)
+
+instance Eq Expr where
+  (==) (Val a) (Val b) = isNaN a && isNaN b || a == b
+  (==) (Op a) (Op b)   = a == b
+  (==) _ _             = False
+
+deriving instance Ord (Prim Double)
+
+instance Eq (Annotated [Prim Double] Double) where
+  (==) (a :# aPrim) (b :# bPrim) = (isNaN a && isNaN b || a == b) && sort aPrim == sort bPrim
+
+deriving instance Eq (Annotated [Prim Expr] Double)
 deriving instance (Show a, Show e) => Show (Annotated e a)
 
 instance Show Expr where
@@ -39,7 +61,7 @@ genValInt :: Gen Expr
 genValInt = Val . fromIntegral <$> Gen.int (Range.linear 1 10)
 
 genVal :: Gen Expr
-genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 1 100)
+genVal = Val . read . flip (showFFloat (Just 5)) "" <$> Gen.double (Range.linearFrac 0 100)
 
 type OpCtr = Expr -> Expr -> Prim Expr
 type UnaryOpCtr = Expr -> Prim Expr

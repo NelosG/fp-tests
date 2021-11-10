@@ -1,9 +1,9 @@
 import T4Spec (tests)
 
-import Hedgehog.Classes
-import Test.State
-import Test.Tasty (defaultMain)
+import Hedgehog.Classes (applicativeLaws, functorLaws, lawsCheck, monadLaws)
 import Main.Utf8 (withUtf8)
+import Test.State (genState)
+import Test.Tasty (defaultMain)
 
 main :: IO ()
 main = withUtf8 $ do

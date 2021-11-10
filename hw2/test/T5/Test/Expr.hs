@@ -1,4 +1,5 @@
 {-# LANGUAGE BlockArguments     #-}
+{-# LANGUAGE FlexibleInstances  #-}
 {-# LANGUAGE LambdaCase         #-}
 {-# LANGUAGE StandaloneDeriving #-}
 
@@ -11,7 +12,7 @@ module Test.Expr
 
 import Control.Monad (replicateM)
 import Data.Bool (bool)
-import Data.List (intercalate)
+import Data.List (intercalate, sort)
 import HW2.T1 (Annotated (..), Except (..))
 import HW2.T4 (Expr (..), Prim (..))
 import HW2.T5 (EvaluationError (..))
@@ -22,7 +23,12 @@ import Numeric (showFFloat)
 
 deriving instance (Eq a) => Eq (Prim a)
 deriving instance Eq Expr
-deriving instance (Eq a, Eq e) => Eq (Annotated e a)
+
+deriving instance Ord (Prim Double)
+
+instance Eq (Annotated [Prim Double] Double) where
+  (==) (a :# aPrim) (b :# bPrim) = a == b && sort aPrim == sort bPrim
+
 deriving instance (Show a, Show e) => Show (Annotated e a)
 deriving instance (Eq a, Eq e) => Eq (Except e a)
 deriving instance (Show a, Show e) => Show (Except e a)

@@ -17,6 +17,10 @@ hspecBaseTest :: IO TestTree
 hspecBaseTest = testSpec "runS tests:" $ do
   it "Base test" $ runS (eval (2 + 3 * 5 - 7)) [] `shouldBe` (10 :# [Sub 17 7, Add 2 15, Mul 3 5])
 
+-- | These are for test tests
+  -- it "Reverse List test" $ runS (eval ((2 + 3) * (7 - 5))) [] `shouldBe` (10 :# [Mul 5 2, Add 2 3, Sub 7 5])
+  -- it "NaN test" $ runS (eval (0 / 0 / 0)) [] `shouldBe` stupidEval (0 / 0 / 0) []
+
 prop_randomExpr :: H.Property
 prop_randomExpr = H.property $ do
   expr <- H.forAll genFullExpr
