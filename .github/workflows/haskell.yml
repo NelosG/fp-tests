@@ -1,0 +1,17 @@
+name: VeryGoodTests
+
+on:
+  push:
+    branches: [ test-workflow ]
+jobs:
+  test:
+    name: HW2
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-haskell@v1.1
+        with:
+          ghc-version: '8.10.4'
+          enable-stack: true
+          stack-version: 'latest'
+      - run: stack test hw2
