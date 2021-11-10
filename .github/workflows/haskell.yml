@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     
@@ -16,9 +15,8 @@ jobs:
       env:
         cache-name: stack-cache
       with:
-        path: /home/runner/.stack
-        key: /home/runner/.stack
-        restore-keys: /home/runner/.stack
+        path: .stack-work
+        key: stack
 
     - name: Run tests
       run: stack test hw2
