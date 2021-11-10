@@ -3,7 +3,7 @@ name: Haskell CI
 on:
   push:
     branches: [ test-workflow ]
-
+ 
 jobs:
   build:
 
