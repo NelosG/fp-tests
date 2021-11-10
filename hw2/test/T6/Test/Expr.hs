@@ -112,7 +112,7 @@ showFull :: Expr -> Gen String
 showFull e = showBuilder e (genSpaces $ Gen.constant 0) (Gen.constant 1)
 
 showExtra :: Expr -> Gen String
-showExtra e = showBuilder e (genSpaces $ Gen.int $ Range.linear 0 2) (Gen.int $ Range.linear 1 2)
+showExtra e = showBuilder e (genSpaces $ Gen.int $ Range.linear 0 2) (Gen.int $ Range.linear 1 10)
 
 genExprBamboo' :: Int -> [OpCtr] -> Gen Expr
 genExprBamboo' 0 _ = genVal
