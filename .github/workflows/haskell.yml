@@ -10,7 +10,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - uses: freckle/stack-cache-action@main
-    
+    - name: Cache
+      uses: pat-s/always-upload-cache@v2.1.5
+      env:
+        cache-name: stack-cache
+      with:
+        path: |
+          ~/.stack
+          ~/work/fp-tests/fp-tests/hw1/.stack-work
+          ~/work/fp-tests/fp-tests/hw2/.stack-work
+          hw1/.stack-work
+          hw2/.stack-work
+        key: stack
+
     - name: Run tests
       run: stack test hw2
