@@ -21,7 +21,7 @@ jobs:
           ~/work/fp-tests/fp-tests/hw2/.stack-work
           hw1/.stack-work
           hw2/.stack-work
-        key: stack
+        key: stack-key-was-not-released-because-i-cancelled-the-workflow-so-i-had-to-write-a-new-key
 
     - name: Run tests
       run: stack test hw2
