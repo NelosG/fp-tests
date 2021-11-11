@@ -8,10 +8,10 @@ runs:
   - name: Cache
     uses: pat-s/always-upload-cache@v2.1.5
     env:
-      cache-name: stack-cache-${{ env.tets-name }}
+      cache-name: stack-cache-${{ env.test-name }}
     with:
       path: |
         ~/.stack
         ~/work/fp-tests/fp-tests/${{ env.tets-name }}/.stack-work
         ${{ env.tets-name }}/.stack-work
-      key: ${{ env.cache-name }}-${{ env.tets-name }}-key
+      key: ${{ env.cache-name }}-${{ env.test-name }}-key
