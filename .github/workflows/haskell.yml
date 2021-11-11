@@ -9,14 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
-    - name: Cache
-      uses: actions/cache@v1
-      env:
-        cache-name: stack-cache
-      with:
-        path: .stack-work
-        key: stack
-
+    - uses: freckle/stack-cache-action@main
     - name: Run tests
       run: stack test hw2
