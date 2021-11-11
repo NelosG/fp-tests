@@ -2,9 +2,9 @@ name: Code Style
 
 on:
   pull_request:
-    branches: [ "test-workflow" ]
+    branches: [ "master" ]
   push:
-    branches: [ "test-workflow" ]
+    branches: [ "master" ]
 
 jobs:
   build:
