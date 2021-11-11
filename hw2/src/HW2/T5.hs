@@ -1,25 +1,41 @@
-module HW2.T5 where
+module HW2.T5
+  ( -- * Datatypes
+    EvaluationError (..)
+  , ExceptState (..)
+    -- * map functions
+  , eval
+  , joinExceptState
+  , mapExceptState
+  , modifyExceptState
+  , wrapExceptState
+  ) where
 
-import HW2.T4
+import HW2.T1 (Annotated ((:#)), Except (Error, Success))
+import HW2.T4 (Expr (Op, Val), Prim (Abs, Add, Div, Mul, Sgn, Sub))
 
--- Implement the following functions:
+data ExceptState e s a = ES
+  { runES :: s -> Except e (Annotated s a)
+  }
 
 mapExceptState :: (a -> b) -> ExceptState e s a -> ExceptState e s b
-wrapExceptState :: a -> ExceptState e s a
-joinExceptState :: ExceptState e s (ExceptState e s a) -> ExceptState e s a
-modifyExceptState :: (s -> s) -> ExceptState e s ()
-throwExceptState :: e -> ExceptState e s a
--- Using those functions, define Functor, Applicative, and Monad instances.
 
--- Using do-notation for ExceptState and combinators we defined for it (pure, modifyExceptState, throwExceptState), define the evaluation function:
+wrapExceptState :: a -> ExceptState e s a
+
+joinExceptState :: ExceptState e s (ExceptState e s a) -> ExceptState e s a
+
+modifyExceptState :: (s -> s) -> ExceptState e s ()
+
+throwExceptState :: e -> ExceptState e s a
+
+instance Functor (...) where
+  ...
+
+instance Applicative (...) where
+  ..
+
+instance Monad (...) where
+  ...
 
 data EvaluationError = DivideByZero
-eval :: Expr -> ExceptState EvaluationError [Prim Double] Double
--- It works just as eval from the previous task but aborts the computation if division by zero occurs:
 
---   runES (eval (2 + 3 * 5 - 7)) []
---     ≡
---   Success (10 :# [Sub 17 7, Add 2 15, Mul 3 5])
---   runES (eval (1 / (10 - 5 * 2))) []
---     ≡
---   Error DivideByZero
+eval :: Expr -> ExceptState EvaluationError [Prim Double] Double
