@@ -43,6 +43,7 @@ tags
 
 # VS
 .vscode/
+.history
 
 # Emacs
 *#
