@@ -114,7 +114,9 @@ tests:
     - tasty
     - hspec
     - hedgehog
+    - hedgehog-classes
     - containers
+    - with-utf8
   t6:
     main:                Spec.hs
     source-dirs:         test/T6
