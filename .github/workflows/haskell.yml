@@ -1,0 +1,27 @@
+name: HW2
+
+on:
+  push:
+    branches: [ master ]
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Cache
+      uses: pat-s/always-upload-cache@v2.1.5
+      env:
+        cache-name: stack-cache
+      with:
+        path: |
+          ~/.stack
+          ~/work/fp-tests/fp-tests/hw1/.stack-work
+          ~/work/fp-tests/fp-tests/hw2/.stack-work
+          hw1/.stack-work
+          hw2/.stack-work
+        key: stack-key-was-not-released-because-i-cancelled-the-workflow-so-i-had-to-write-a-new-key
+
+    - name: Run tests
+      run: stack test hw2
