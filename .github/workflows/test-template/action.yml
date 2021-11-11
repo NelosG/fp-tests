@@ -1,0 +1,17 @@
+name: VeryGoodTests
+ 
+runs:
+  using: "composite"
+  steps:
+  - uses: actions/checkout@v2
+    
+  - name: Cache
+    uses: pat-s/always-upload-cache@v2.1.5
+    env:
+      cache-name: stack-cache-${{ env.tets-name }}
+    with:
+      path: |
+        ~/.stack
+        ~/work/fp-tests/fp-tests/${{ env.tets-name }}/.stack-work
+        ${{ env.tets-name }}/.stack-work
+      key: ${{ env.cache-name }}-${{ env.tets-name }}-key

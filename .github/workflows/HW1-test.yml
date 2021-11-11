@@ -1,0 +1,17 @@
+name: HW1
+
+on:
+  push:
+    branches: [ master, main ]
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/workflows/test-template
+      env:
+        test-name: hw1
+      
+    - name: HW1 tests
+      run: stack test hw1
