@@ -21,10 +21,18 @@ module HW2.T2
   , wrapStream
   ) where
 
-import HW2.T1 (Annotated ((:#)), Except (Error, Success), Fun (F), List (Nil, (:.)),
-               Option (None, Some), Pair (P), Prioritised (High, Low, Medium), Quad (Q),
-               Stream ((:>)))
-import Prelude (Monoid, Semigroup, mempty, (<>))
+import HW2.T1
+  (
+    Option(..)
+  , Pair(..)
+  , Quad(..)
+  , Annotated(..)
+  , Except(..)
+  , Prioritised(..)
+  , Stream(..)
+  , List(..)
+  , Fun(..)
+  )
 
 distOption :: (Option a, Option b) -> Option (a, b)
 

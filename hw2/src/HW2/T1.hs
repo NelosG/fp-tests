@@ -23,8 +23,6 @@ module HW2.T1
   , mapTree
   ) where
 
-import Prelude ()
-
 data Option a
   = None
   | Some a
