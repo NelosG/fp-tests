@@ -9,7 +9,6 @@ module Test.TFun
 import qualified Data.Bifunctor
 import HW2.T1 (Fun (F), mapFun)
 import HW2.T2 (distFun, wrapFun)
-import HW2.T3 ()
 import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Internal.Range as Range
