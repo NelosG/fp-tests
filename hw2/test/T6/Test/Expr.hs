@@ -3,7 +3,7 @@
 {-# LANGUAGE StandaloneDeriving #-}
 
 module Test.Expr
-  ( InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen)
+  ( InvalidVariant (..)
   , convertToLeftAssoc
   , evalExprInt
   , genExpr
@@ -249,6 +249,7 @@ data InvalidVariant = MissingParen
                     | MissingOperand
                     | FakeOperation
                     | MissingOperation
+                    | IncorrectDouble
   deriving (Eq)
 
 showInvalid' :: Expr -> Expr -> String -> InvalidVariant -> Gen String
@@ -259,19 +260,34 @@ showInvalid' a b op invalidVariant = do
     doSkipOperand = invalidVariant == MissingOperand
     doSkipOperation = invalidVariant == MissingOperation
     doFakeOperation = invalidVariant == FakeOperation
+    doInvalidDouble1 = invalidVariant == IncorrectDouble
   as <- showInvalid a invalidVariant
   bs <- showInvalid b invalidVariant
   extraPos <- bool (Gen.constant 0) (Gen.int (Range.constant 1 6)) doExtraWord
   skipParen <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipParen
   skipOperand <- bool (Gen.constant 0) (Gen.int (Range.constant 1 2)) doSkipOperand
+  doubleProblem <- bool (Gen.constant 0) (Gen.int (Range.constant 1 7)) doInvalidDouble1
   let (eBeg:eRest) = map (bool "" "LOL" . (==extraPos)) [1..6]
   return $ eBeg ++ concat (zipWith (++) [
                         bool "" "(" (skipParen /= 2)
-                        , bool "" as (skipOperand /= 2)
+                        , bool "" (doubleToChoose doubleProblem as) (skipOperand /= 2)
                         , bool (bool op "$" doFakeOperation) "" doSkipOperation
                         , bool "" bs (skipOperand /= 1)
-                        , bool "" ")" (skipParen /= 1) ]
+                        , bool "" ")" (skipParen /= 1)
+                        ]
                            eRest)
+
+doubleToChoose :: Int -> String -> String
+doubleToChoose x param = case x of
+  0 -> param
+  1 -> ".42"
+  2 -> " .42"
+  3 -> "69."
+  4 -> "69. "
+  5 -> "69. 42"
+  6 -> "69 .42"
+  7 -> "69 . 42"
+  _ -> error "unexpeted"
 
 showInvalid :: Expr -> InvalidVariant -> Gen String
 showInvalid (Val x)        = \_ ->return $ showDouble x
