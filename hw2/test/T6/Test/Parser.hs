@@ -10,7 +10,7 @@ import HW2.T1 (Except (..))
 import HW2.T4 (Expr, Prim (..))
 import HW2.T6 (parseExpr)
 import Hedgehog (Gen, Property, failure, forAll, property, success, (===), PropertyT)
-import Test.Expr (InvalidVariant (ExtraWord, FakeOperation, MissingOperand, MissingOperation, MissingParen),
+import Test.Expr (InvalidVariant (..),
                   convertToLeftAssoc, evalExprInt, genExpr, genExprBamboo, genExprInvalid,
                   genExprPriority, genExprPriorityAssoc, genVal, showBamboo, showExtra, showFull,
                   showInvalidExpr, showMinGen, showPriority)
@@ -88,4 +88,6 @@ propParser = return $
     , testProperty "Add Mul Div Sub. Invalid expression. Missing parenthesis" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingParen
     , testProperty "Add Mul Div Sub. Invalid expression. Missing operand" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperand
     , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr MissingOperation
-    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr FakeOperation ]
+    , testProperty "Add Mul Div Sub. Invalid expression. Missing operation" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr FakeOperation
+    , testProperty "Add Mul Div Sub. Invalid expression. Incorrect doubles" $ invalidExpr (genExprInvalid [Add, Mul, Div, Sub]) $ showInvalidExpr IncorrectDouble
+    ]
