@@ -1,6 +1,6 @@
 name:                hw1
 version:             0.1.0.0
-github:              "NelosG/hw1/fp-tests"
+github:              "NelosG/fp-tests"
 license:             GPL-3
 author:              "Leonid Vasilev && Gleb Pushkarev"
 maintainer:          "vasiklenka@gmail.com or gleb.pushkarev@gmail.com"

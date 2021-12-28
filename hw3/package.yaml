@@ -1,0 +1,79 @@
+name:                hw3
+version:             0.1.0.0
+github:              "NelosG/fp-tests"
+license:             GPL-3
+author:              "Gleb Pushkarev"
+maintainer:          "gleb.pushkarev@gmail.com"
+copyright:           "2021 Gleb Pushkarev"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
+homepage:       https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+  - megaparsec
+  - prettyprinter
+  - prettyprinter-ansi-terminal
+  - bytestring
+  - scientific
+  - parser-combinators
+  - text
+  - containers
+  - time
+  - random
+
+executables:
+  hi:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -Wall
+    - -Werror 
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskeline
+    - hw3
+
+tests:
+  hi-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -Wall
+    - -Werror 
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw3
+    - containers
+    - hedgehog
+    - hspec
+    - tasty
+    - test-framework
+    - tasty-hedgehog
+    - tasty-quickcheck
+    - tasty-hunit
+    - tasty-smallcheck
+    - tasty-hspec
+    - megaparsec
+    - prettyprinter
+    - prettyprinter-ansi-terminal
+    - text >= 1.2.4.1
+    - scientific

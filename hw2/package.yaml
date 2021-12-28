@@ -1,6 +1,6 @@
 name:                hw2
 version:             0.1.0.0
-github:              "NelosG/hw2/fp-tests"
+github:              "NelosG/fp-tests"
 license:             GPL-3
 author:              "Gleb Pushkarev"
 maintainer:          "gleb.pushkarev@gmail.com"
