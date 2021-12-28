@@ -1,0 +1,18 @@
+name: HW3
+
+on:
+  push:
+    branches: [ master, main ]
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/workflows/test-template
+      env:
+        test-name: hw3
+      
+    - name: HW3 tests
+      run: stack test hw3
+      
