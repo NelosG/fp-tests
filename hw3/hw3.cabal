@@ -1,0 +1,67 @@
+name:                hw3
+version:             0.1.0.0
+synopsis:            Synopsis for task 3
+description:         Task 3 for FP ITMO course
+
+homepage:            https://github.com/messieurMe/fp-homework/tree/master/hw3#readme
+license:             MIT
+license-file:        LICENSE
+author:              Aslan
+maintainer:          messerrolelol@gmail.com
+copyright:           2021 Aslan
+
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+tested-with:         GHC == 8.0.1
+
+library
+  hs-source-dirs:      src
+  exposed-modules:
+    HW3.Base
+    HW3.Evaluator
+    HW3.Parser
+    HW3.Pretty
+  ghc-options:         -Wall
+  build-depends:       base >= 4.9 && < 5
+                     , megaparsec
+                     , prettyprinter
+                     , prettyprinter-ansi-terminal
+                     , text >= 1.2.4.1
+                     , scientific
+  default-language:    Haskell2010
+
+executable hi
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base >= 4.9 && < 5
+                     , hw3
+--                     , haskeline >= 0.7.0.3
+  default-language:    Haskell2010
+
+test-suite hi-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base >=4.7 && <5
+                     , hw3
+                     , containers
+                     , hedgehog
+                     , hspec
+                     , tasty
+                     , test-framework
+                     , tasty-hedgehog
+                     , tasty-quickcheck
+                     , tasty-hunit
+                     , tasty-smallcheck
+                     , tasty-hspec
+                     , megaparsec
+                     , prettyprinter
+                     , prettyprinter-ansi-terminal
+                     , text >= 1.2.4.1
+                     , scientific
+  other-modules:     T1.T1Spec
+  ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
