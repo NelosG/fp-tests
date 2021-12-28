@@ -8,7 +8,7 @@ name:           hw2
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
 homepage:       https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
-bug-reports:    https://github.com/NelosG/hw2/issues
+bug-reports:    https://github.com/NelosG/fp-tests/issues
 author:         Gleb Pushkarev
 maintainer:     gleb.pushkarev@gmail.com
 copyright:      2021 Gleb Pushkarev
@@ -20,8 +20,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/NelosG/hw2
-  subdir: fp-tests
+  location: https://github.com/NelosG/fp-tests
 
 library
   exposed-modules:

@@ -6,22 +6,21 @@ cabal-version: 1.12
 
 name:           hw3
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/NelosG/hw3#readme>
-homepage:       https://github.com/NelosG/hw3#readme
-bug-reports:    https://github.com/NelosG/hw3/issues
+description:    Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
+homepage:       https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
+bug-reports:    https://github.com/NelosG/fp-tests/issues
 author:         Gleb Pushkarev
 maintainer:     gleb.pushkarev@gmail.com
 copyright:      2021 Gleb Pushkarev
-license:        BSD3
+license:        GPL-3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
-  location: https://github.com/NelosG/hw3
+  location: https://github.com/NelosG/fp-tests
 
 library
   exposed-modules:
