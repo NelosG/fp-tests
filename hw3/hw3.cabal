@@ -53,7 +53,7 @@ executable hi
       Paths_hw3
   hs-source-dirs:
       app
-  ghc-options: -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , haskeline
@@ -64,18 +64,35 @@ test-suite hi-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Hi.Test.Common
+      Hi.Test.T10Spec
+      Hi.Test.T11Spec
+      Hi.Test.T1Spec
+      Hi.Test.T2Spec
+      Hi.Test.T3Spec
+      Hi.Test.T4Spec
+      Hi.Test.T5Spec
+      Hi.Test.T6Spec
+      Hi.Test.T7Spec
+      Hi.Test.T8Spec
+      Hi.Test.T9Spec
       T1.T1Spec
       Paths_hw3
   hs-source-dirs:
       test
-  ghc-options: -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      hspec-discover:hspec-discover
   build-depends:
       base >=4.7 && <5
     , containers
+    , either
     , hedgehog
     , hspec
+    , hspec-hedgehog
     , hw3
     , megaparsec
+    , mtl
     , prettyprinter
     , prettyprinter-ansi-terminal
     , scientific
@@ -85,6 +102,5 @@ test-suite hi-test
     , tasty-hunit
     , tasty-quickcheck
     , tasty-smallcheck
-    , test-framework
-    , text >=1.2.4.1
+    , text
   default-language: Haskell2010

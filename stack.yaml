@@ -6,7 +6,7 @@ packages:
   - hw3
 
 extra-deps:
-  - hedgehog-classes-0.2.5.2
+- hedgehog-classes-0.2.5.3
 
 flags: {}
 

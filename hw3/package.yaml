@@ -25,24 +25,22 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
-  - megaparsec
-  - prettyprinter
-  - prettyprinter-ansi-terminal
-  - bytestring
-  - scientific
-  - parser-combinators
-  - text
-  - containers
-  - time
-  - random
+    - megaparsec
+    - prettyprinter
+    - prettyprinter-ansi-terminal
+    - bytestring
+    - scientific
+    - parser-combinators
+    - text
+    - containers
+    - time
+    - random
 
 executables:
   hi:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
-    - -Wall
-    - -Werror 
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -55,8 +53,6 @@ tests:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
-    - -Wall
-    - -Werror 
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -66,7 +62,6 @@ tests:
     - hedgehog
     - hspec
     - tasty
-    - test-framework
     - tasty-hedgehog
     - tasty-quickcheck
     - tasty-hunit
@@ -75,5 +70,9 @@ tests:
     - megaparsec
     - prettyprinter
     - prettyprinter-ansi-terminal
-    - text >= 1.2.4.1
+    - text
     - scientific
+    - mtl
+    - hspec-hedgehog
+    - either
+    build-tools: hspec-discover
