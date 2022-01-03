@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP, QuasiQuotes #-}
 module Hi.Test.T10Spec (spec) where
 
 import Text.RawString.QQ
@@ -17,15 +18,15 @@ spec = do
 	emptyTest
 #else
 	let testEvalIO = testEvalM $ unwrapHIO Set.empty
-	describe "short-circuit" do
-		it "&& ||" do
+	describe "short-circuit" $ do
+		it "&& ||" $ do
 			"null || 1" ~=?? Ok "1"
 			"1 || null" ~=?? Ok "1"
 			"null && 1" ~=?? Ok "null"
 			"1 && null" ~=?? Ok "null"
 			[r|rand(0, 5.5)|] ~=?? EvalError HiErrorInvalidArgument
 			[r|rand(40, -40)|] ~=?? EvalError HiErrorInvalidArgument
-		it "echo return null" do
+		it "echo return null" $ do
 			testEvalIO [r|echo("you should not see it")|] `shouldBe` Ok [r|echo("you should not see it")|]
 			testEvalIO [r|echo("you should not see it")!|] `shouldBe` Perm AllowWrite
 			-- I have no idea how to test it

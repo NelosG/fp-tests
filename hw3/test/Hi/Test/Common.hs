@@ -1,10 +1,10 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE QuasiQuotes, CPP, RecordWildCards  #-}
 
 module Hi.Test.Common
-	( module Hi.Test.Common
-	, module Test.Hspec
-	, module HW3.Base
-	) where
+    ( module Hi.Test.Common
+    , module Test.Hspec
+    , module HW3.Base
+    ) where
 
 import Control.Monad.Identity
 import Control.Exception
@@ -15,6 +15,7 @@ import Data.Either.Combinators (rightToMaybe)
 import qualified Data.Set as Set
 import System.IO.Unsafe
 import Test.Hspec.Hedgehog (hedgehog, failure)
+import Text.RawString.QQ
 
 import HW3.Base
 import HW3.Evaluator
@@ -52,7 +53,7 @@ instance HiMonad Identity where
 
 unwrapHIO :: Set.Set HiPermission -> HIO EvalRes -> TestRes
 unwrapHIO perm HIO {..} =
-	unsafePerformIO do
+	unsafePerformIO $ do
 		res <- (Right <$> runHIO perm)
 			`catch` (\(PermissionRequired ex) -> return $ Left ex)
 		case res of

@@ -1,13 +1,13 @@
-name:                hw3
-version:             0.1.0.0
-github:              "NelosG/fp-tests"
-license:             GPL-3
-author:              "Gleb Pushkarev"
-maintainer:          "gleb.pushkarev@gmail.com"
-copyright:           "2021 Gleb Pushkarev"
+name: hw3
+version: 0.1.0.0
+github: "NelosG/fp-tests"
+license: GPL-3
+author: "Gleb Pushkarev"
+maintainer: "gleb.pushkarev@gmail.com"
+copyright: "2021 Gleb Pushkarev"
 
 extra-source-files:
-- README.md
+  - README.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -16,11 +16,11 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
-homepage:       https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
+description: Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw2/README.md>
+homepage: https://github.com/NelosG/fp-tests/blob/master/hw2/README.md
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
 
 library:
   source-dirs: src
@@ -35,44 +35,58 @@ library:
     - containers
     - time
     - random
+    - mtl
+    - transformers
+    - bits
+    - zlib
+    - serialise
+    - directory
+    - template-haskell
 
 executables:
   hi:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
-    - haskeline
-    - hw3
+      - haskeline
+      - containers
+      - hw3
 
 tests:
   hi-test:
-    main:                Spec.hs
-    source-dirs:         test
+    main: Spec.hs
+    source-dirs: test
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    cpp-options:
+      - -DHI_TEST_UPTO=10
     dependencies:
-    - hw3
-    - containers
-    - hedgehog
-    - hspec
-    - tasty
-    - tasty-hedgehog
-    - tasty-quickcheck
-    - tasty-hunit
-    - tasty-smallcheck
-    - tasty-hspec
-    - megaparsec
-    - prettyprinter
-    - prettyprinter-ansi-terminal
-    - text
-    - scientific
-    - mtl
-    - hspec-hedgehog
-    - either
+      - hw3
+      - containers
+      - hedgehog
+      - hspec
+      - tasty
+      - tasty-hedgehog
+      - tasty-quickcheck
+      - tasty-hunit
+      - tasty-smallcheck
+      - tasty-hspec
+      - megaparsec
+      - prettyprinter
+      - prettyprinter-ansi-terminal
+      - text
+      - scientific
+      - mtl
+      - hspec-hedgehog
+      - either
+      - raw-strings-qq
+      - HUnit
+      - directory
+      - template-haskell
     build-tools: hspec-discover

@@ -1,0 +1,109 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           hw0
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw0/README.md>
+homepage:       https://github.com/NelosG/fp-tests/blob/master/hw0/README.md
+bug-reports:    https://github.com/NelosG/fp-tests/issues
+author:         Leonid Vasilev
+maintainer:     vasiklenka@gmail.com
+copyright:      2021 Leonid Vasilev
+license:        GPL-3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/NelosG/fp-tests
+
+library
+  exposed-modules:
+      HW0.T1
+      HW0.T2
+      HW0.T3
+      HW0.T4
+      HW0.T5
+      HW0.T6
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+test-suite t1
+  type: exitcode-stdio-1.0
+  main-is: HW0T1_assessor.hs
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      test/T1
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , hw0
+  default-language: Haskell2010
+
+test-suite t2
+  type: exitcode-stdio-1.0
+  main-is: HW0T2_assessor.hs
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      test/T2
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , hw0
+  default-language: Haskell2010
+
+test-suite t3
+  type: exitcode-stdio-1.0
+  main-is: HW0T3_assessor.hs
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      test/T3
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , hw0
+  default-language: Haskell2010
+
+test-suite t4
+  type: exitcode-stdio-1.0
+  main-is: HW0T4_assessor.hs
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      test/T4
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , hw0
+  default-language: Haskell2010
+
+test-suite t5
+  type: exitcode-stdio-1.0
+  main-is: HW0T5_assessor.hs
+  other-modules:
+      Paths_hw0
+  hs-source-dirs:
+      test/T5
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , hw0
+  default-language: Haskell2010

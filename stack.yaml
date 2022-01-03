@@ -4,6 +4,7 @@ packages:
   - hw1
   - hw2
   - hw3
+  - hw0
 
 extra-deps:
 - hedgehog-classes-0.2.5.3

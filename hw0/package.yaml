@@ -1,0 +1,71 @@
+name:                hw0
+version:             0.1.0.0
+github:              "NelosG/fp-tests"
+license:             GPL-3
+author:              "Leonid Vasilev"
+maintainer:          "vasiklenka@gmail.com"
+copyright:           "2021 Leonid Vasilev"
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on GitHub at <https://github.com/NelosG/fp-tests/blob/master/hw0/README.md>
+homepage:       https://github.com/NelosG/fp-tests/blob/master/hw0/README.md
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+tests:
+  t1:
+    main:                HW0T1_assessor.hs
+    source-dirs:         test/T1
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw0
+    - QuickCheck
+  t2:
+    main:                HW0T2_assessor.hs
+    source-dirs:         test/T2
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw0
+    - QuickCheck
+  t3:
+    main:                HW0T3_assessor.hs
+    source-dirs:         test/T3
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw0
+    - QuickCheck
+  t4:
+    main:                HW0T4_assessor.hs
+    source-dirs:         test/T4
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw0
+    - QuickCheck
+  t5:
+    main:                HW0T5_assessor.hs
+    source-dirs:         test/T5
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hw0
+    - QuickCheck

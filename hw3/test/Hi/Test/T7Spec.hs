@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP, BangPatterns, QuasiQuotes #-}
 module Hi.Test.T7Spec (spec) where
 
 import Text.RawString.QQ
@@ -10,6 +11,7 @@ import System.IO
 import System.IO.Unsafe (unsafePerformIO)
 import System.Directory
 import Control.Monad
+import Text.RawString.QQ
 
 import qualified Data.Set as Set
 
@@ -19,10 +21,10 @@ spec = do
 	emptyTest
 #else
 	let testEvalIO = testEvalM . unwrapHIO . Set.fromList
-	let realRead s = withFile s ReadMode $ hGetContents'
+	let realRead s = withFile s ReadMode $ hGetContents
 	-- | I failed to lift IO in test, it is avaliable in "it", but not here
 	let !cwd0 = unsafePerformIO getCurrentDirectory
-	after_ (setCurrentDirectory cwd0) $ describe "actions" do
+	after_ (setCurrentDirectory cwd0) $ describe "actions" $ do
 		let
 			dummyApplications =
 				[ [r|cd("a")|]
@@ -30,7 +32,7 @@ spec = do
 				, [r|read("fle")|]
 				, [r|write("to", [# 30 #])|]
 				]
-		it "constants" do
+		it "constants" $ do
 			let check s = s ~=?? Ok s
 			check "cd"
 			check "cd"
@@ -39,9 +41,9 @@ spec = do
 			check "write"
 			mapM_ (\s -> s ~=?? Ok s) dummyApplications
 			[r|write("to", "what")|] ~=?? EvalError HiErrorInvalidArgument
-		it "run parses" do
+		it "run parses" $ do
 			mapM_ (\s -> s ++ "!" ~=?? Ok "null") dummyApplications
-		it "IO" do
+		it "IO" $ do
 			cwd <- getCurrentDirectory
 			testEvalIO
 					[AllowRead, AllowWrite]
@@ -74,8 +76,8 @@ spec = do
 					[AllowRead, AllowWrite]
 					[r|read("read.test")!|]
 				`shouldBe` Ok [r|"303030\n"|]
-		it "permissions" do
-			let banned b act = do
+		it "permissions" $ do
+			let banned b act =  do
 				testEvalIO
 						(filter (/= b) [minBound..maxBound])
 						act
@@ -85,7 +87,7 @@ spec = do
 			banned AllowWrite [r|write("write.test", [# 65 #])!|]
 			banned AllowWrite [r|mkdir("testmk")!|]
 			banned AllowWrite [r|cd("..")!|]
-		it "read-string" do
+		it "read-string" $ do
 			testEvalIO
 					[AllowWrite]
 					[r|write("test/exec/write.test", [# ff #])!|]
@@ -94,7 +96,7 @@ spec = do
 					[AllowRead]
 					[r|read("test/exec/write.test")!|]
 				`shouldBe` Ok [r|[# ff #]|]
-		it "lazy" do
+		it "lazy" $ do
 			testEvalIO
 					[AllowWrite]
 					-- move bang out of if to additionally test propogation

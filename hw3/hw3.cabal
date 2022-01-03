@@ -35,16 +35,23 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , bits
     , bytestring
     , containers
+    , directory
     , megaparsec
+    , mtl
     , parser-combinators
     , prettyprinter
     , prettyprinter-ansi-terminal
     , random
     , scientific
+    , serialise
+    , template-haskell
     , text
     , time
+    , transformers
+    , zlib
   default-language: Haskell2010
 
 executable hi
@@ -56,6 +63,7 @@ executable hi
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
     , haskeline
     , hw3
   default-language: Haskell2010
@@ -77,15 +85,19 @@ test-suite hi-test
       Hi.Test.T8Spec
       Hi.Test.T9Spec
       T1.T1Spec
+      T1.T2Spec
       Paths_hw3
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  cpp-options: -DHI_TEST_UPTO=10
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
-      base >=4.7 && <5
+      HUnit
+    , base >=4.7 && <5
     , containers
+    , directory
     , either
     , hedgehog
     , hspec
@@ -95,6 +107,7 @@ test-suite hi-test
     , mtl
     , prettyprinter
     , prettyprinter-ansi-terminal
+    , raw-strings-qq
     , scientific
     , tasty
     , tasty-hedgehog
@@ -102,5 +115,6 @@ test-suite hi-test
     , tasty-hunit
     , tasty-quickcheck
     , tasty-smallcheck
+    , template-haskell
     , text
   default-language: Haskell2010
