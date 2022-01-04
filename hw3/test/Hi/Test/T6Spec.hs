@@ -19,7 +19,7 @@ spec = do
 			-- "[# 001 #]" ~=?? ParseError ">2-place in bytes"
 			-- "[# -0 #]" ~=?? ParseError "negative in bytes"
 			"[#00#]" ~=?? Ok "[# 00 #]"
-			"[##]" ~=?? Ok "[#  #]"
+			"[##]" ~=?? Ok "[# #]"
 			"[#         #]" ~=?? Ok "[# #]"
 		it "overload" $ do
 			"[# 00 ff #] + [# 01 e3 #]" ~=?? Ok "[# 00 ff 01 e3 #]"
@@ -58,7 +58,7 @@ spec = do
 			testEval ("decode-utf8(encode-utf8(" ++ show s ++ "))") === Ok (show s)
 		it "indexing" $ do
 			"[# de ad ba be #](2)" ~=?? Ok ("[# " <> (showHex (0xba :: Int) "") <> " #]")
-			"[# de ad ba be #](-1)" ~=?? Ok ("[# " <> (showHex (0xbe :: Int) "") <> " #]")
+			"[# de ad ba be #](-1)" ~=?? Ok "null"
 			"[# de ad ba be #](1000)" ~=?? Ok "null"
 		it "slicing" $ do
 			"[# de ad ba be #](null, 2)" ~=?? Ok "[# de ad #]"
