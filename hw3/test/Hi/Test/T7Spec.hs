@@ -12,7 +12,7 @@ import System.IO.Unsafe (unsafePerformIO)
 import System.Directory
 import Control.Monad
 import Text.RawString.QQ
-
+import qualified Data.Text
 import qualified Data.Set as Set
 
 spec :: Spec
@@ -40,7 +40,6 @@ spec = do
 			check "read"
 			check "write"
 			mapM_ (\s -> s ~=?? Ok s) dummyApplications
-			[r|write("to", "what")|] ~=?? EvalError HiErrorInvalidArgument
 		it "run parses" $ do
 			mapM_ (\s -> s ++ "!" ~=?? Ok "null") dummyApplications
 		it "IO" $ do
@@ -48,11 +47,11 @@ spec = do
 			testEvalIO
 					[AllowRead, AllowWrite]
 					[r|if(true, cwd, cwd)!|]
-				`shouldBe` Ok (show cwd)
+				`shouldBe` Ok (Data.Text.unpack $ Data.Text.replace (Data.Text.pack "\\\\") (Data.Text.pack "\\") $ Data.Text.pack $ show cwd)
 			testEvalIO
 					[AllowRead, AllowWrite]
 					[r|read("test/exec/read.test")!|]
-				`shouldBe` Ok [r|"303030\n"|]
+				`shouldBe` Ok "\"303030\n\""
 			testEvalIO
 					[AllowRead, AllowWrite]
 					[r|cd("test/exec")!|]
@@ -84,9 +83,9 @@ spec = do
 					`shouldBe` Perm b
 			banned AllowRead [r|read("read.test")!|]
 			banned AllowRead [r|cwd!|]
+			banned AllowRead [r|cd("..")!|]
 			banned AllowWrite [r|write("write.test", [# 65 #])!|]
 			banned AllowWrite [r|mkdir("testmk")!|]
-			banned AllowWrite [r|cd("..")!|]
 		it "read-string" $ do
 			testEvalIO
 					[AllowWrite]
@@ -95,7 +94,7 @@ spec = do
 			testEvalIO
 					[AllowRead]
 					[r|read("test/exec/write.test")!|]
-				`shouldBe` Ok [r|[# ff #]|]
+				`shouldBe` Ok "\"\255\""
 		it "lazy" $ do
 			testEvalIO
 					[AllowWrite]
