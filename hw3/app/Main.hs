@@ -1,6 +1,8 @@
-module Main where
+module Main
+  ( main
+  ) where
 
-    
+
 --import HW3.Base ()
 --import HW3.Evaluator
 --import HW3.Parser

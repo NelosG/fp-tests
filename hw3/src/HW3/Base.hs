@@ -1,14 +1,21 @@
-module HW3.Base where
+module HW3.Base
+  ( HiError (..)
+  , HiExpr (..)
+  , HiFun (..)
+  , HiMonad (..)
+  , HiValue (..)
+  ) where
 
-import Data.Text
-  
+import Data.ByteString (ByteString)
+import Data.Text (Text)
+
 data HiFun
-  
+
   = HiFunDiv --p7 l
   | HiFunMul --p7 l
   | HiFunAdd --p6 l
   | HiFunSub --p6 l
-  
+
   | HiFunNot
   | HiFunAnd --p3 r
   | HiFunOr --p2 r
@@ -19,13 +26,13 @@ data HiFun
   | HiFunNotGreaterThan --p4
   | HiFunNotEquals --p4
   | HiFunIf
-  
+
   | HiFunLength
   | HiFunToUpper
   | HiFunToLower
   | HiFunReverse
   | HiFunTrim
-  
+
   deriving (Show, Eq, Ord)
 
 data HiValue
@@ -33,7 +40,7 @@ data HiValue
   | HiValueFunction HiFun
 
   | HiValueBool Bool
-  
+
   | HiValueNull
   | HiValueString Text
 
@@ -50,3 +57,14 @@ data HiError
   | HiErrorArityMismatch
   | HiErrorDivideByZero
   deriving (Show, Eq, Ord)
+
+data HiAction =
+    HiActionRead  FilePath
+  | HiActionWrite FilePath ByteString
+  | HiActionMkDir FilePath
+  | HiActionChDir FilePath
+  | HiActionCwd
+
+
+class Monad m => HiMonad m where
+  runAction :: HiAction -> m HiValue
