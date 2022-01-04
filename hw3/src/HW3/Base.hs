@@ -2,9 +2,11 @@ module HW3.Base
   ( HiError (..)
   , HiExpr (..)
   , HiFun (..)
+  , HiMonad (..)
   , HiValue (..)
   ) where
 
+import Data.ByteString (ByteString)
 import Data.Text (Text)
 
 data HiFun
@@ -55,3 +57,14 @@ data HiError
   | HiErrorArityMismatch
   | HiErrorDivideByZero
   deriving (Show, Eq, Ord)
+
+data HiAction =
+    HiActionRead  FilePath
+  | HiActionWrite FilePath ByteString
+  | HiActionMkDir FilePath
+  | HiActionChDir FilePath
+  | HiActionCwd
+
+
+class Monad m => HiMonad m where
+  runAction :: HiAction -> m HiValue
