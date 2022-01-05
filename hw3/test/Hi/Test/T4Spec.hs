@@ -43,7 +43,7 @@ spec = do
 			[r|"6 am"(2, null)|] ~=?? Ok [r|"am"|]
 			[r|"6 am"(null, 3)|] ~=?? Ok [r|"6 a"|]
 			[r|"lilmealone"(null, -1)|] ~=?? Ok [r|"lilmealon"|]
-			[r|"aaa"(2, -2)|] ~=?? Ok "null"
+			[r|"aaa"(2, -2)|] ~=?? Ok [r|""|]
 		it "int-index" $ do
 			[r|to-upper("what a nice language")(7, 11)|] ~=?? Ok [r|"NICE"|]
 			[r|"Hello" == "World"|] ~=?? Ok "false"
