@@ -80,6 +80,11 @@ spec = do
       sga `shouldSatisfy` (`elem` [Ok "true", Ok "false"])
       als `shouldBe` sga
       "or(less-than(add, mul), less-than(mul, add))" ~=?? Ok "true"
+    it "bool is less than number" $ hedgehog $ do
+      b <- forAll genBool
+      n <- forAll genNum
+      res <- testEvalExpr (HiExprApply (funToExpr HiFunLessThan) ([HiExprValue b, HiExprValue n]))
+      res === Ok "true"
   describe "if" $ do
     it "basic" $ do
       "if(false, 0, 1)" ~=?? Ok "1"
@@ -127,7 +132,7 @@ spec = do
     where
       funToExpr :: HiFun -> HiExpr
       funToExpr = HiExprValue . HiValueFunction
-      
+
       check :: (Show a, MonadTest m) => [Char] -> (a -> a -> Bool) -> a -> a -> m ()
       check s f n1 n2 = do
         let op = s ++ "(" ++ show n1 ++ ", " ++ show n2 ++ ")"
