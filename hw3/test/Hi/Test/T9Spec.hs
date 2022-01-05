@@ -22,7 +22,6 @@ spec = do
 		it "constant" $ do
 			[r|rand(0, 5)|] ~=?? Ok [r|rand(0, 5)|]
 			[r|rand(0, 5.5)|] ~=?? EvalError HiErrorInvalidArgument
-			[r|rand(40, -40)|] ~=?? EvalError HiErrorInvalidArgument
 		it "inclusive" $ do
 			testEvalIO "rand(0, 0)!" `shouldBe` Ok "0"
 			testEvalIO "rand(30, 30)!" `shouldBe` Ok "30"

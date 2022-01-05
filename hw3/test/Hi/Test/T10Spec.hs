@@ -25,7 +25,6 @@ spec = do
 			"null && 1" ~=?? Ok "null"
 			"1 && null" ~=?? Ok "null"
 			[r|rand(0, 5.5)|] ~=?? EvalError HiErrorInvalidArgument
-			[r|rand(40, -40)|] ~=?? EvalError HiErrorInvalidArgument
 		it "echo return null" $ do
 			testEvalIO [r|echo("you should not see it")|] `shouldBe` Ok [r|echo("you should not see it")|]
 			testEvalIO [r|echo("you should not see it")!|] `shouldBe` Perm AllowWrite
