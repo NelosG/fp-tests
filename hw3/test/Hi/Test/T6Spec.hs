@@ -5,7 +5,7 @@ import Text.RawString.QQ
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 import Test.Hspec.Hedgehog
-
+import Data.Text
 import Hi.Test.Common
 import Numeric (showHex)
 
@@ -43,7 +43,8 @@ spec = do
 			testEval ("deserialise(serialise(" ++ show s ++ "))") === Ok (show s)
 		it "serialization str" $ hedgehog $ do
 			s :: String <- forAll $ Gen.string (Range.linear 0 100) Gen.alpha
-			testEval ("deserialise(serialise(" ++ show s ++ "))") === Ok (show s)
+			testEval ("deserialise(serialise(" ++ show s ++ "))") === 
+			  Ok (Data.Text.unpack $ Data.Text.replace (Data.Text.pack "\\\\") (Data.Text.pack "\\") $ Data.Text.pack $ show s)
 		it "int-index" $ do
 			"pack-bytes(range(30, 40))" ~=?? Ok "[# 1e 1f 20 21 22 23 24 25 26 27 28 #]"
 			"decode-utf8([# 68 69 #] * 5)" ~=?? Ok [r|"hihihihihi"|]
