@@ -20,7 +20,7 @@ import qualified Hedgehog.Range as Range
 import Numeric (showEFloat)
 import System.IO.Unsafe
 import Test.Hspec
-import Test.Hspec.Hedgehog (Gen, MonadTest, Range, failure, hedgehog, (===))
+import Test.Hspec.Hedgehog (Gen, MonadTest, Range, failure, hedgehog, (===), annotate)
 import Text.Megaparsec.Error (errorBundlePretty)
 import Text.RawString.QQ
 
@@ -83,8 +83,11 @@ testEvalM unwrap s =
 testEval :: String -> TestRes
 testEval = testEvalM (matchEval . runIdentity)
 
-testEvalExpr :: HiExpr -> TestRes
-testEvalExpr = testEval . showExpr
+testEvalExpr :: (MonadTest m, HasCallStack) => HiExpr -> m TestRes
+testEvalExpr e = do
+  let eString = showExpr e
+  annotate eString
+  return $ testEval eString
 
 infix 1 ~=??
 (~=??) :: HasCallStack => String -> TestRes -> Expectation
@@ -107,12 +110,18 @@ genExpr = Gen.frequency
 
 genValue :: Gen HiValue
 genValue = Gen.choice
-  [ HiValueNumber <$> ((%) <$> (Gen.integral ourRange) <*> (Gen.integral ourRange))
-  , HiValueFunction <$> genFun
-  , HiValueBool <$> Gen.bool]
+  [ genNum
+  , genFun
+  , genBool]
 
-genFun :: Gen HiFun
-genFun = Gen.element
+genNum :: Gen HiValue
+genNum = HiValueNumber <$> ((%) <$> (Gen.integral ourRange) <*> (Gen.constant 1))
+
+genBool :: Gen HiValue
+genBool = HiValueBool <$> Gen.bool
+
+genFun :: Gen HiValue
+genFun = HiValueFunction <$> Gen.element
   [ HiFunAdd
   , HiFunAnd
   , HiFunDiv
@@ -153,8 +162,10 @@ showExpr (HiExprApply f args) = showExpr f ++ "(" ++ intercalate ", " (map showE
 
 
 testSameEval :: MonadTest m => HiExpr -> HiExpr -> m ()
-testSameEval e1 e2 = case (evalE1, evalE2) of
-                       (EvalError _, EvalError _) -> pure ()
-                       _                          -> evalE1 === evalE2
-                     where evalE1 = testEvalExpr e1
-                           evalE2 = testEvalExpr e2
+testSameEval e1 e2 = do
+  e1res <- testEvalExpr e1
+  e2res <- testEvalExpr e2
+  case (e1res, e2res) of
+    (EvalError _, EvalError _) -> pure ()
+    _                          -> e1res === e2res
+  e1res === e2res

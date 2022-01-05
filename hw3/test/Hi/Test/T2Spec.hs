@@ -53,6 +53,13 @@ spec = do
     it "different types" $ do
       "equals(false, 0)" ~=?? Ok "false"
       "equals(1, true)" ~=?? Ok "false"
+    it "different types as properties" $ hedgehog $ do
+      f <- forAll genFun
+      b <- forAll genBool
+      n <- forAll genNum
+      mapM_
+        (\(a, b) -> testEval ("equals(" ++ (showExpr . HiExprValue) a ++ ", " ++ (showExpr . HiExprValue) b ++ ")") === Ok "false")
+        [(f, b), (b, f), (f, n), (n, f), (b, n), (n, b)]
     it "functions" $ do
       "equals(add, add)" ~=?? Ok "true"
       "equals(add, sub)" ~=?? Ok "false"
