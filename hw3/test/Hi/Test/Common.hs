@@ -45,7 +45,7 @@ data TestRes
 instance Eq TestRes where
   ParseError _ == ParseError _ = True
   Ok a == Ok b = ((==) `on` filter (/= '\n')) a b
-  EvalError a == EvalError b = a == b
+  EvalError _ == EvalError _ = True
 #if HI_TEST_UPTO >= 7
   Perm a == Perm b = a == b
 #endif
