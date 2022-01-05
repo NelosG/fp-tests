@@ -45,7 +45,7 @@ data TestRes
 instance Eq TestRes where
   ParseError _ == ParseError _ = True
   Ok a == Ok b = ((==) `on` filter (/= '\n')) a b
-  EvalError _ == EvalError _ = True
+  EvalError a == EvalError b = a == b
 #if HI_TEST_UPTO >= 7
   Perm a == Perm b = a == b
 #endif
@@ -153,4 +153,8 @@ showExpr (HiExprApply f args) = showExpr f ++ "(" ++ intercalate ", " (map showE
 
 
 testSameEval :: MonadTest m => HiExpr -> HiExpr -> m ()
-testSameEval e1 e2 = testEvalExpr e1 === testEvalExpr e2
+testSameEval e1 e2 = case (evalE1, evalE2) of
+                       (EvalError _, EvalError _) -> pure ()
+                       _                          -> evalE1 === evalE2
+                     where evalE1 = testEvalExpr e1
+                           evalE2 = testEvalExpr e2
