@@ -1,4 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hi.Test.T1Spec
   ( spec
   ) where
@@ -6,6 +7,8 @@ module Hi.Test.T1Spec
 import HW3.Base
 import Hi.Test.Common
 import Text.RawString.QQ
+import qualified Hedgehog.Gen as Gen
+import Test.Hspec.Hedgehog (hedgehog, forAll, (===))
 
 spec :: Spec
 spec = do
@@ -18,6 +21,14 @@ spec = do
       "mul(2, 10)" ~=?? Ok "20"
       "sub(1000, 7)" ~=?? Ok "993" -- ya umer prosti
       "div(3, 5)" ~=?? Ok "0.6"
+    it "functions as properties" $ hedgehog $ do
+      x <- forAll $ Gen.integral ourRange
+      y <- forAll $ Gen.integral ourRange
+      let test name op = testEval (name ++ "(" ++ show x ++ "," ++ show y ++ ")") === Ok (show (x `op` y))
+      test "add" (+)
+      test "sub" (-)
+      test "mul" (*)
+      -- no sub because we need to implement pretty printing to test that
     it "functions 2" $ do
       "add(500, 12)" ~=?? Ok "512"
       "sub(10, 100)" ~=?? Ok "-90"
@@ -40,6 +51,10 @@ spec = do
       "div((3),(1))" ~=?? Ok "3"
     it "function strings" $ do
       "add" ~=?? Ok "add"
+    it "function strings as properties" $ hedgehog $ do
+      f <- forAll genFun
+      let fString = showExpr $ HiExprValue f
+      testEval fString === Ok fString
     it "output" $ do
       "3.14" ~=?? Ok "3.14"
       "div(1, 3)" ~=?? Ok "1/3"
