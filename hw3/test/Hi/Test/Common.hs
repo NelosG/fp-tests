@@ -97,6 +97,12 @@ infix 1 ~=?!
 (~=?!) :: String -> TestRes -> Expectation
 b ~=?! a = testEval b `shouldNotBe` a
 
+infix 1 ~=!!
+(~=!!) :: MonadTest m => HiExpr -> TestRes -> m ()
+expr ~=!! val = do
+  res <- testEvalExpr expr
+  res === val
+
 ourRange :: Integral a => Range a
 ourRange = Range.linear (negate 1000) 1000
 
@@ -112,7 +118,8 @@ genValue :: Gen HiValue
 genValue = Gen.choice
   [ genNum
   , genFun
-  , genBool]
+  , genBool
+  , genString]
 
 genNum :: Gen HiValue
 genNum = HiValueNumber <$> ((%) <$> (Gen.integral ourRange) <*> (Gen.constant 1))
@@ -137,6 +144,8 @@ genFun = HiValueFunction <$> Gen.element
   , HiFunOr
   , HiFunSub]
 
+genString :: Gen HiValue
+genString = HiValueString <$> Gen.text (Range.linear 0 100) Gen.alphaNum
 
 -- only for gen!
 showExpr :: HiExpr -> String
@@ -157,7 +166,14 @@ showExpr (HiExprValue v)      = case v of
     HiFunNotGreaterThan -> "not-greater-than"
     HiFunNotEquals      -> "not-equals"
     HiFunIf             -> "if"
+    HiFunLength         -> "length"
+    HiFunToUpper        -> "to-upper"
+    HiFunToLower        -> "to-lower"
+    HiFunReverse        -> "reverse"
+    HiFunTrim           -> "trim"
   HiValueBool b     -> if b then "true" else "false"
+  HiValueString t -> show t
+  HiValueNull -> "null"
 showExpr (HiExprApply f args) = showExpr f ++ "(" ++ intercalate ", " (map showExpr args) ++ ")"
 
 
