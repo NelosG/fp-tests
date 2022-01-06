@@ -83,8 +83,7 @@ spec = do
     it "bool is less than number" $ hedgehog $ do
       b <- forAll genBool
       n <- forAll genNum
-      res <- testEvalExpr (HiExprApply (funToExpr HiFunLessThan) ([HiExprValue b, HiExprValue n]))
-      res === Ok "true"
+      (HiExprApply (funToExpr HiFunLessThan) ([HiExprValue b, HiExprValue n])) ~=!! Ok "true"
   describe "if" $ do
     it "basic" $ do
       "if(false, 0, 1)" ~=?? Ok "1"
