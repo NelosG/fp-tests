@@ -31,6 +31,8 @@ import HW3.Pretty
 
 #ifndef TEST_NO_HI_MONAD
 import HW3.Action
+import Data.Sequence (fromList)
+import Data.Foldable (toList)
 #endif
 
 data TestRes
@@ -104,7 +106,7 @@ expr ~=!! val = do
   res === val
 
 ourRange :: Integral a => Range a
-ourRange = Range.linear (negate 1000) 1000
+ourRange = Range.linear 0 1000
 
 emptyTest :: Spec
 emptyTest = describe "NOT IMPLEMENTED" $ it "fail" $ hedgehog failure
@@ -119,7 +121,8 @@ genValue = Gen.choice
   [ genNum
   , genFun
   , genBool
-  , genString]
+  , genString
+  , genSeq]
 
 genNum :: Gen HiValue
 genNum = HiValueNumber <$> ((%) <$> (Gen.integral ourRange) <*> (Gen.constant 1))
@@ -147,10 +150,16 @@ genFun = HiValueFunction <$> Gen.element
 genString :: Gen HiValue
 genString = HiValueString <$> Gen.text (Range.linear 0 100) Gen.alphaNum
 
+genSeq :: Gen HiValue
+genSeq = (HiValueList . fromList) <$> Gen.list (Range.linear 0 5) genValue
+
+makeOp :: HiFun -> HiValue -> HiValue -> HiExpr
+makeOp op lhs rhs = HiExprApply (HiExprValue $ HiValueFunction op) (map HiExprValue [lhs, rhs])
+
 -- only for gen!
 showExpr :: HiExpr -> String
 showExpr (HiExprValue v)      = case v of
-  HiValueNumber num -> "div(" ++ show (numerator num) ++ ", " ++ show (denominator num) ++ ")"
+  HiValueNumber num -> show (numerator num)
   HiValueFunction f -> case f of
     HiFunDiv            -> "div"
     HiFunMul            -> "mul"
@@ -174,6 +183,7 @@ showExpr (HiExprValue v)      = case v of
   HiValueBool b     -> if b then "true" else "false"
   HiValueString t -> show t
   HiValueNull -> "null"
+  HiValueList lst -> "[ " ++ intercalate ", " (map (showExpr . HiExprValue) $ toList lst) ++ " ]"
 showExpr (HiExprApply f args) = showExpr f ++ "(" ++ intercalate ", " (map showExpr args) ++ ")"
 
 
