@@ -15,7 +15,7 @@ import qualified Hedgehog.Internal.Range as Range
 import Hi.Test.Common
 import Test.Hspec.Hedgehog (forAll, hedgehog, (===))
 import Text.RawString.QQ
-import Data.Semigroup (stimes, stimesIdempotent)
+import Data.Semigroup (stimes)
 
 spec :: Spec
 spec = do
@@ -62,11 +62,11 @@ spec = do
     it "operators" $ hedgehog $ do
       s1@(HiValueString t1) <- forAll genString
       s2@(HiValueString t2) <- forAll genString
-      n <- forAll $ Gen.integral $ Range.linear 0 100
+      n <- forAll $ Gen.integral $ Range.linear 1 100
       let makeOp op lhs rhs = HiExprApply (HiExprValue $ HiValueFunction op) (map HiExprValue [lhs, rhs])
       makeOp HiFunAdd s1 s2 ~=!! (Ok $ show $ t1 <> t2)
       makeOp HiFunDiv s1 s2 ~=!! (Ok $ show $ t1 <> T.pack "/" <> t2)
-      makeOp HiFunMul s1 (HiValueNumber $ n % 1) ~=!! (Ok $ show $ if n == 0 then T.pack "" else stimes n t1)
+      makeOp HiFunMul s1 (HiValueNumber $ n % 1) ~=!! (Ok $ show $ stimes n t1)
     it "slice properties (advanced)" $ hedgehog $ do
       s@(HiValueString t) <- forAll genString
       HiExprValue s ~=!! (Ok $ show t)
