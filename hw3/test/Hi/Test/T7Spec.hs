@@ -94,7 +94,7 @@ spec = do
 			testEvalIO
 					[AllowRead]
 					[r|read("test/exec/write.test")!|]
-				`shouldBe` Ok "\"\255\""
+				`shouldBe` Ok "[# ff #]"
 		it "lazy" $ do
 			testEvalIO
 					[AllowWrite]
