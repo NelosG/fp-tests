@@ -184,4 +184,3 @@ testSameEval e1 e2 = do
   case (e1res, e2res) of
     (EvalError _, EvalError _) -> pure ()
     _                          -> e1res === e2res
-  e1res === e2res
