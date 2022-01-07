@@ -19,6 +19,8 @@ spec = do
     it "int-index const" $ do
       "list(1,2)" ~=?? Ok "[ 1, 2 ]"
       "range(5, 10.3)" ~=?? Ok "[ 5, 6, 7, 8, 9, 10 ]"
+    it "expr in list literal" $ do
+      "[1 + 2, div(3, 2)]" ~=?? Ok "[ 3, 1.5 ]"
     it "overload" $ do
       [r| length([1, true, "Hello"])|] ~=?? Ok "3"
       [r|reverse([1, true, "Hello"])|] ~=?? Ok [r|[ "Hello", true, 1 ]|]
@@ -43,8 +45,8 @@ spec = do
       s1@(HiValueList l1) <- forAll genSeq
       s2@(HiValueList l2) <- forAll genSeq
       n <- forAll $ Gen.integral $ Range.linear 1 100
-      (makeOp HiFunAdd s1 s2) ~=!! (Ok $ showExpr $ HiExprValue . HiValueList $ l1 >< l2)
-      (makeOp HiFunMul s1 (HiValueNumber $ n % 1)) ~=!! (Ok . showExpr . HiExprValue . HiValueList $ stimes n l1)
+      (makeBinaryOp HiFunAdd s1 s2) ~=!! (Ok $ showExpr $ HiExprValue . HiValueList $ l1 >< l2)
+      (makeBinaryOp HiFunMul s1 (HiValueNumber $ n % 1)) ~=!! (Ok . showExpr . HiExprValue . HiValueList $ stimes n l1)
     it "indexing properties" $ hedgehog $ do
       s@(HiValueList l) <- forAll $ (HiValueList . fromList) <$> Gen.list (Range.linear 1 5) genValue
       n <- forAll $ Gen.integral $ Range.linear 0 $ (length l) - 1
