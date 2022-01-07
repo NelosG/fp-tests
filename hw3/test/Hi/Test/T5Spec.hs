@@ -19,6 +19,8 @@ spec = do
     it "int-index const" $ do
       "list(1,2)" ~=?? Ok "[ 1, 2 ]"
       "range(5, 10.3)" ~=?? Ok "[ 5, 6, 7, 8, 9, 10 ]"
+    it "expr in list literal" $ do
+      "[1 + 2, div(3, 2)]" ~=?? Ok "[ 3, 1.5 ]"
     it "overload" $ do
       [r| length([1, true, "Hello"])|] ~=?? Ok "3"
       [r|reverse([1, true, "Hello"])|] ~=?? Ok [r|[ "Hello", true, 1 ]|]
