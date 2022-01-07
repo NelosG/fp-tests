@@ -31,7 +31,7 @@ import HW3.Pretty
 
 #ifndef TEST_NO_HI_MONAD
 import HW3.Action
-import Data.Sequence (fromList)
+import Data.Sequence (fromList, Seq (Empty))
 import Data.Foldable (toList)
 #endif
 
@@ -180,11 +180,15 @@ showExpr (HiExprValue v)      = case v of
     HiFunToLower        -> "to-lower"
     HiFunReverse        -> "reverse"
     HiFunTrim           -> "trim"
+    _ -> undefined 
   HiValueBool b     -> if b then "true" else "false"
   HiValueString t -> show t
   HiValueNull -> "null"
+  HiValueList Empty -> "[ ]"
   HiValueList lst -> "[ " ++ intercalate ", " (map (showExpr . HiExprValue) $ toList lst) ++ " ]"
+  _ -> undefined 
 showExpr (HiExprApply f args) = showExpr f ++ "(" ++ intercalate ", " (map showExpr args) ++ ")"
+showExpr _ = undefined 
 
 
 testSameEval :: MonadTest m => HiExpr -> HiExpr -> m ()

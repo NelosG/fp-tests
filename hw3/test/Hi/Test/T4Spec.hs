@@ -45,7 +45,7 @@ spec = do
     it "slicing" $ do
       [r|"Hello World"(0, 5)|] ~=?? Ok [r|"Hello"|]
       [r|"Hello World"(2, 4)|] ~=?? Ok [r|"ll"|]
-      [r|"suicide"(4, 100)|] ~=?? Ok [r|"ide"|]
+      [r|"suicide"(4, 100)|] ~=?? Ok [r|null|]
       [r|""(0, 0)|] ~=?? Ok [r|""|]
     it "slicing advanced/bonus" $ do
       "null == null" ~=?? Ok "true"
