@@ -1,11 +1,9 @@
 module T1.T1Spec (spec) where
 
-import Data.Text (pack)
 import Data.Void (Void)
 import HW3.Base
 import HW3.Parser
-import Test.Tasty (TestTree)
-import Test.Tasty.Hspec (Spec, describe, it, shouldBe, testSpec)
+import Test.Tasty.Hspec (Spec, describe, it, shouldBe)
 import Text.Megaparsec.Error (ParseErrorBundle)
 
 spec :: Spec
@@ -69,15 +67,6 @@ simpE f args = Right (HiExprApply (toFun f) args)
 simpEPure :: HiFun -> [HiExpr] -> HiExpr
 simpEPure f args = (HiExprApply (toFun f) args)
 
-notSimpE :: HiExpr -> [HiExpr] -> Either (ParseErrorBundle String Void) HiExpr
-notSimpE f args = Right (HiExprApply f args)
-notSimpEPure :: HiExpr -> [HiExpr] -> HiExpr
-notSimpEPure f args = (HiExprApply f args)
-
-
-toExpr :: HiValue -> HiExpr
-toExpr v = HiExprValue $ v
-
 toFun :: HiFun -> HiExpr
 toFun x = HiExprValue $ HiValueFunction x
 
@@ -87,15 +76,4 @@ toNumV x = HiValueNumber x
 toNumE :: Rational -> HiExpr
 toNumE x = HiExprValue $ toNumV x
 
-toBoolV :: Bool -> HiValue
-toBoolV x = HiValueBool x
-
-toBoolE :: Bool -> HiExpr
-toBoolE x = HiExprValue $ toBoolV x
-
-toStringV :: String -> HiValue
-toStringV x = HiValueString (pack x)
-
-toStringE :: String -> HiExpr
-toStringE x = HiExprValue $ toStringV x
 
