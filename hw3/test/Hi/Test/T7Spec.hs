@@ -109,4 +109,9 @@ spec = do
         `shouldBe` Ok [r|null|]
       sure <- realRead "test/exec/write.test"
       sure `shouldBe` "for sure"
+    it "multiple-run" $ do
+      testEvalIO
+          [AllowTime]
+          [r|now!!|]
+        `shouldBe` EvalError HiErrorInvalidFunction
 #endif
