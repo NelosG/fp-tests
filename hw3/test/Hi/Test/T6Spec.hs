@@ -36,8 +36,6 @@ spec = do
       "unzip([# 78 da 63 64 62 06 00 00 0d 00 07 #])" ~=?? Ok "[# 01 02 03 #]"
     it "serialization simple" $ do
       "deserialise(serialise(null))" ~=?? Ok "null"
-      [r|deserialise(serialise("null"))|] ~=?? Ok [r|"null"|]
-      "deserialise([# 30 #])" ~=?? Ok "null"
     it "serialization num" $ hedgehog $ do
       s <- forAll $ Gen.int (Range.linear 0 100)
       testEval ("deserialise(serialise(" ++ show s ++ "))") === Ok (show s)
@@ -45,6 +43,11 @@ spec = do
       s :: String <- forAll $ Gen.string (Range.linear 0 100) Gen.alpha
       testEval ("deserialise(serialise(" ++ show s ++ "))") ===
         Ok (Data.Text.unpack $ Data.Text.replace (Data.Text.pack "\\\\") (Data.Text.pack "\\") $ Data.Text.pack $ show s)
+    it "serialization any" $ hedgehog $ do
+      expr <- forAll genExpr
+      testSameEval
+        expr
+        $ makeOp HiFunDeserialise [makeOp HiFunSerialise [expr]]
     it "int-index" $ do
       "pack-bytes(range(30, 40))" ~=?? Ok "[# 1e 1f 20 21 22 23 24 25 26 27 28 #]"
       "decode-utf8([# 68 69 #] * 5)" ~=?? Ok [r|"hihihihihi"|]

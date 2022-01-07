@@ -132,20 +132,36 @@ genBool = HiValueBool <$> Gen.bool
 
 genFun :: Gen HiValue
 genFun = HiValueFunction <$> Gen.element
-  [ HiFunAdd
-  , HiFunAnd
-  , HiFunDiv
-  , HiFunEquals
-  , HiFunGreaterThan
-  , HiFunIf
-  , HiFunLessThan
-  , HiFunMul
-  , HiFunNot
-  , HiFunNotEquals
+  [ HiFunDiv           
+  , HiFunMul           
+  , HiFunAdd           
+  , HiFunSub           
+  , HiFunNot           
+  , HiFunAnd           
+  , HiFunOr            
+  , HiFunLessThan      
+  , HiFunGreaterThan   
+  , HiFunEquals        
+  , HiFunNotLessThan   
   , HiFunNotGreaterThan
-  , HiFunNotLessThan
-  , HiFunOr
-  , HiFunSub]
+  , HiFunNotEquals     
+  , HiFunIf            
+  , HiFunLength        
+  , HiFunToUpper       
+  , HiFunToLower       
+  , HiFunReverse       
+  , HiFunTrim          
+  , HiFunList          
+  , HiFunRange         
+  , HiFunFold          
+  , HiFunPackBytes     
+  , HiFunUnpackBytes   
+  , HiFunEncodeUtf8    
+  , HiFunDecodeUtf8    
+  , HiFunZip           
+  , HiFunUnzip         
+  , HiFunSerialise     
+  , HiFunDeserialise ]
 
 genString :: Gen HiValue
 genString = HiValueString <$> Gen.text (Range.linear 0 100) Gen.alphaNum
@@ -153,8 +169,11 @@ genString = HiValueString <$> Gen.text (Range.linear 0 100) Gen.alphaNum
 genSeq :: Gen HiValue
 genSeq = (HiValueList . fromList) <$> Gen.list (Range.linear 0 5) genValue
 
-makeOp :: HiFun -> HiValue -> HiValue -> HiExpr
-makeOp op lhs rhs = HiExprApply (HiExprValue $ HiValueFunction op) (map HiExprValue [lhs, rhs])
+makeOp :: HiFun -> [HiExpr] -> HiExpr
+makeOp op args = HiExprApply (HiExprValue $ HiValueFunction op) args
+
+makeBinaryOp :: HiFun -> HiValue -> HiValue -> HiExpr
+makeBinaryOp op lhs rhs = makeOp op $ map HiExprValue [lhs, rhs]
 
 -- only for gen!
 showExpr :: HiExpr -> String
@@ -180,7 +199,17 @@ showExpr (HiExprValue v)      = case v of
     HiFunToLower        -> "to-lower"
     HiFunReverse        -> "reverse"
     HiFunTrim           -> "trim"
-    _ -> undefined 
+    HiFunList           -> "list"
+    HiFunRange          -> "range"
+    HiFunFold           -> "fold"
+    HiFunPackBytes      -> "pack-bytes"
+    HiFunUnpackBytes    -> "unpack-bytes"
+    HiFunEncodeUtf8     -> "encode-utf8"
+    HiFunDecodeUtf8     -> "decode-utf8"
+    HiFunZip            -> "zip"
+    HiFunUnzip          -> "unzip"
+    HiFunSerialise      -> "serialise"
+    HiFunDeserialise    -> "deserialise"
   HiValueBool b     -> if b then "true" else "false"
   HiValueString t -> show t
   HiValueNull -> "null"

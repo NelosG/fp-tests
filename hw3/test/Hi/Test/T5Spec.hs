@@ -45,8 +45,8 @@ spec = do
       s1@(HiValueList l1) <- forAll genSeq
       s2@(HiValueList l2) <- forAll genSeq
       n <- forAll $ Gen.integral $ Range.linear 1 100
-      (makeOp HiFunAdd s1 s2) ~=!! (Ok $ showExpr $ HiExprValue . HiValueList $ l1 >< l2)
-      (makeOp HiFunMul s1 (HiValueNumber $ n % 1)) ~=!! (Ok . showExpr . HiExprValue . HiValueList $ stimes n l1)
+      (makeBinaryOp HiFunAdd s1 s2) ~=!! (Ok $ showExpr $ HiExprValue . HiValueList $ l1 >< l2)
+      (makeBinaryOp HiFunMul s1 (HiValueNumber $ n % 1)) ~=!! (Ok . showExpr . HiExprValue . HiValueList $ stimes n l1)
     it "indexing properties" $ hedgehog $ do
       s@(HiValueList l) <- forAll $ (HiValueList . fromList) <$> Gen.list (Range.linear 1 5) genValue
       n <- forAll $ Gen.integral $ Range.linear 0 $ (length l) - 1
