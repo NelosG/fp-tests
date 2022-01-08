@@ -35,6 +35,8 @@ spec = do
     it "operators" $ do
       [r|"Hello" + "World"|] ~=?? Ok [r|"HelloWorld"|]
       [r|"Cat" * 3|] ~=?? Ok [r|"CatCatCat"|]
+      [r|"Cat" * -1|] ~=?? EvalError HiErrorInvalidArgument
+      [r|"Cat" * 0|] ~=?? EvalError HiErrorInvalidArgument
       [r|"/dev" / "null"|] ~=?? Ok [r|"/dev/null"|]
     it "indexing" $ do
       [r|"kill me"(0)|] ~=?? Ok [r|"k"|]

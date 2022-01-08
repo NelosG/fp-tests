@@ -26,6 +26,8 @@ spec = do
       [r|reverse([1, true, "Hello"])|] ~=?? Ok [r|[ "Hello", true, 1 ]|]
       "[1, 2] + [3, 4]" ~=?? Ok "[ 1, 2, 3, 4 ]"
       "[1, 2] * 2" ~=?? Ok "[ 1, 2, 1, 2 ]"
+      "[1, 2] * 0" ~=?? EvalError HiErrorInvalidArgument
+      "[1, 2] * -1" ~=?? EvalError HiErrorInvalidArgument
     it "int-index slice" $ do
       [r|[0, true, false, "hello", "world"](2, 4)|] ~=?? Ok [r|[ false, "hello" ]|]
       "reverse(range(0.5, 70/8))" ~=?? Ok "[ 8.5, 7.5, 6.5, 5.5, 4.5, 3.5, 2.5, 1.5, 0.5 ]"
@@ -35,6 +37,13 @@ spec = do
       "fold(div, [11, 22, 33])" ~=?? Ok "1/66"
       "fold(add, [2, 5] * 3)" ~=?? Ok "21"
       "fold(mul, range(1, 10))" ~=?? Ok "3628800"
+      "fold(and, [true, true, false])" ~=?? Ok "false"
+      "fold(or, [true, false, true])" ~=?? Ok "true"
+      [r|fold(add, ["kek", "cheburek"])|] ~=?? Ok [r|"kekcheburek"|]
+      [r|fold(div, ["kek", "cheburek"])|] ~=?? Ok [r|"kek/cheburek"|]
+    it "lazy fold" $ do
+      "fold(or, [true, 1, true])" ~=?? Ok "true"
+      "fold(and, [false, cwd!])" ~=?? Ok "false"
     it "empty fold" $ do
       "fold(add, [])" ~=?? Ok "null"
     it "advanced fold" $ do

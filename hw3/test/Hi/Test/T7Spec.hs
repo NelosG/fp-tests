@@ -103,4 +103,8 @@ spec = do
           [AllowTime]
           [r|now!!|]
         `shouldBe` EvalError HiErrorInvalidArgument
+      testEvalIO
+          [AllowRead]
+          [r|cwd!!|]
+        `shouldBe` EvalError HiErrorInvalidArgument
 #endif
