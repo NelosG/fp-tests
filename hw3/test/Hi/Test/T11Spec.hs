@@ -40,3 +40,4 @@ spec = do
       [r|{ "a": {"b": echo} }.a.b.hello!.h|] ~=?? EvalError HiErrorInvalidFunction
     it "OH SHEAT" $ do
       [r|count.hello-world(invert(count.hello-world)(3)(0))|] ~=?? Ok "3"
+      [r|{      "add"     : add   }.add(1, 10)|] ~=?? Ok "11"

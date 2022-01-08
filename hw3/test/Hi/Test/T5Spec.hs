@@ -37,6 +37,12 @@ spec = do
       "fold(div, [11, 22, 33])" ~=?? Ok "1/66"
       "fold(add, [2, 5] * 3)" ~=?? Ok "21"
       "fold(mul, range(1, 10))" ~=?? Ok "3628800"
+      "fold(and, [true, true, false])" ~=?? Ok "false"
+      "fold(or, [true, false, true])" ~=?? Ok "true"
+      [r|fold(add, ["kek", "cheburek"])|] ~=?? Ok [r|"kekcheburek"|]
+      [r|fold(div, ["kek", "cheburek"])|] ~=?? Ok [r|"kek/cheburek"|]
+    it "lazy fold" $ do
+      "fold(or, [true, 1, true])" ~=?? Ok "true"
     it "empty fold" $ do
       "fold(add, [])" ~=?? Ok "null"
     it "advanced fold" $ do
