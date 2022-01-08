@@ -27,6 +27,7 @@ library
       HW3.Action
       HW3.Base
       HW3.Evaluator
+      HW3.Helper
       HW3.Parser
       HW3.Pretty
   other-modules:

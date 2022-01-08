@@ -51,6 +51,7 @@ spec = do
     it "int-index" $ do
       "pack-bytes(range(30, 40))" ~=?? Ok "[# 1e 1f 20 21 22 23 24 25 26 27 28 #]"
       "decode-utf8([# 68 69 #] * 5)" ~=?? Ok [r|"hihihihihi"|]
+      "[# 12 ff#](1)" ~=?? Ok "255"
     it "unzip . zip === id" $ hedgehog $ do
       s :: String <- forAll $ Gen.string (Range.linear 0 100) Gen.alpha
       case testEval $ "encode-utf8(" ++ show s ++ ")" of
@@ -59,11 +60,21 @@ spec = do
         err -> annotate (show err) >> failure
     it "decode-utf8 . encode-utf8 === id" $ hedgehog $ do
       s :: String <- forAll $ Gen.string (Range.linear 1 100) Gen.unicode
-      testEval ("decode-utf8(encode-utf8(" ++ show s ++ "))") === Ok ("\"" <> s <> "\"")
+      testEval ("decode-utf8(encode-utf8(" ++ show s ++ "))") === Ok (show s)
     it "indexing" $ do
       "[# de ad ba be #](2)" ~=?? Ok (show (0xba :: Int))
       "[# de ad ba be #](-1)" ~=?? Ok "null"
       "[# de ad ba be #](1000)" ~=?? Ok "null"
     it "slicing" $ do
+      "[# de ad ba be #](1, 1000)" ~=?? Ok "[# ad ba be #]"
+      "[# de ad ba be #](1, 3)" ~=?? Ok "[# ad ba #]"
+    it "slicing advanced" $ do
       "[# de ad ba be #](null, 2)" ~=?? Ok "[# de ad #]"
       "[# de ad ba be #](1, -1)" ~=?? Ok "[# ad ba #]"
+      "[# de ad ba be #](null, null)" ~=?? Ok "[# de ad ba be #]"
+    it "wrong identity" $ do
+      "[# 1 #]" ~=?? ParseError ""
+      "[# 1 2 #]" ~=?? ParseError ""
+      "[# 123 #]" ~=?? ParseError ""
+      "[# 1234 #]" ~=?? ParseError ""
+

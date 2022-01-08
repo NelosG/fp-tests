@@ -42,15 +42,15 @@ spec = do
       ((parse $ deepExprString 10 "and") `shouldBe` (Right $ deepExpr 10 HiFunAnd))
       ((parse $ deepExprString 10 "or") `shouldBe` (Right $ deepExpr 10 HiFunOr))
   describe "Strange if" $ do
-    it "Strange if" $ do      
-      (parse "if(true, equals, less-than)(if(false, true, false), if(false, not-greater-than, less-than)(5, 15))") 
+    it "Strange if" $ do
+      (parse "if(true, equals, less-than)(if(false, true, false), if(false, not-greater-than, less-than)(5, 15))")
       `shouldBe`
        (notSimpE (simpEPure HiFunIf [toBoolE True,toFun HiFunEquals,toFun HiFunLessThan]) [simpEPure HiFunIf [toBoolE False, toBoolE True, toBoolE False],notSimpEPure (simpEPure HiFunIf [toBoolE False, toFun HiFunNotGreaterThan, toFun HiFunLessThan]) [toNumE 5, toNumE 15] ])
-      
-        
-   
-          
-  
+
+
+
+
+
 
 
 deepExpr :: Int -> HiFun -> HiExpr

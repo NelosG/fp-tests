@@ -75,5 +75,3 @@ toNumV x = HiValueNumber x
 
 toNumE :: Rational -> HiExpr
 toNumE x = HiExprValue $ toNumV x
-
-

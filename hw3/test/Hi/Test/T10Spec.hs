@@ -30,4 +30,6 @@ spec = do
       testEvalIO [r|echo("you should not see it")!|] `shouldBe` Perm AllowWrite
       -- I have no idea how to test it
       testEvalM (unwrapHIO $ Set.fromList [AllowWrite]) [r|echo("you should see it")!|] `shouldBe` Ok "null"
+    it "double run" $ do
+      testEvalM (unwrapHIO $ Set.fromList [AllowWrite]) [r|echo("you shouldn't see it")!!|] `shouldBe` EvalError HiErrorInvalidArgument
 #endif

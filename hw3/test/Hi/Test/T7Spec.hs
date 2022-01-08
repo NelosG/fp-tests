@@ -46,11 +46,11 @@ spec = do
       testEvalIO
           [AllowRead, AllowWrite]
           [r|if(true, cwd, cwd)!|]
-        `shouldBe` Ok (Data.Text.unpack $ Data.Text.replace (Data.Text.pack "\\\\") (Data.Text.pack "\\") $ Data.Text.pack $ show cwd)
+        `shouldBe` Ok (show cwd)
       testEvalIO
           [AllowRead, AllowWrite]
           [r|read("test/exec/read.test")!|]
-        `shouldBe` Ok "\"303030\n\""
+        `shouldBe` Ok "\"303030\\r\\n\""
       testEvalIO
           [AllowRead, AllowWrite]
           [r|cd("test/exec")!|]
@@ -65,15 +65,8 @@ spec = do
         `shouldBe` Ok [r|"30"|]
       testEvalIO
           [AllowRead, AllowWrite]
-          [r|write("write.test", encode-utf8("1000-7"))!|]
-        `shouldBe` Ok [r|null|]
-      -- bug with lazy IO
-      v1000m7 <- realRead "write.test"
-      v1000m7 `shouldBe` "1000-7"
-      testEvalIO
-          [AllowRead, AllowWrite]
-          [r|read("read.test")!|]
-        `shouldBe` Ok [r|"303030\n"|]
+          [r|write("write.test", encode-utf8("1000-7"))! || read("write.test")!|]
+        `shouldBe` Ok [r|"1000-7"|]
     it "permissions" $ do
       let banned b act =  do
             testEvalIO
@@ -96,22 +89,18 @@ spec = do
         `shouldBe` Ok "[# ff #]"
     it "lazy" $ do
       testEvalIO
-          [AllowWrite]
+          [AllowWrite, AllowRead]
           -- move bang out of if to additionally test propogation
-          [r|if(false, write("test/exec/write.test", "nonlazy")!, write("test/exec/write.test", encode-utf8("lazy")))!|]
-        `shouldBe` Ok [r|null|]
-      lz <- realRead "test/exec/write.test"
-      lz `shouldBe` "lazy"
+          [r|if(false, write("test/exec/write.test", "nonlazy")!, write("test/exec/write.test", encode-utf8("lazy")))! || read("test/exec/write.test")!|]
+        `shouldBe` Ok [r|"lazy"|]
       testEvalIO
-          [AllowWrite]
+          [AllowWrite, AllowRead]
           -- meve bang out of if to additionally test propogation
-          [r|if(true, write("test/exec/write.test", encode-utf8("for sure"))!, write("test/exec/write.test", "oops leftmost")!)|]
-        `shouldBe` Ok [r|null|]
-      sure <- realRead "test/exec/write.test"
-      sure `shouldBe` "for sure"
+          [r|if(true, write("test/exec/write.test", encode-utf8("for sure"))!, write("test/exec/write.test", "oops leftmost")!) || read("test/exec/write.test")!|]
+        `shouldBe` Ok [r|"for sure"|]
     it "multiple-run" $ do
       testEvalIO
           [AllowTime]
           [r|now!!|]
-        `shouldBe` EvalError HiErrorInvalidFunction
+        `shouldBe` EvalError HiErrorInvalidArgument
 #endif
