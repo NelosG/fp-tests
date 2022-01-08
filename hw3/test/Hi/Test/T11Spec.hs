@@ -41,3 +41,4 @@ spec = do
     it "OH SHEAT" $ do
       [r|count.hello-world(invert(count.hello-world)(3)(0))|] ~=?? Ok "3"
       [r|{      "add"     : add   }.add(1, 10)|] ~=?? Ok "11"
+      [r|{"kek" : kek}..kek!|] ~=?? ParseError ""
