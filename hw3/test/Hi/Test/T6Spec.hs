@@ -66,6 +66,8 @@ spec = do
       "reverse([# ab cd #])" ~=?? Ok "[# cd ab #]"
       "length([# cd ab #])"  ~=?? Ok "2"
       "[# ab cd #] * 5" ~=?? Ok "[# ab cd ab cd ab cd ab cd ab cd #]"
+      "[# ab cd #] * -1" ~=?? EvalError HiErrorInvalidArgument
+      "[# ab cd #] * 0" ~=?? EvalError HiErrorInvalidArgument
     it "indexing" $ do
       "[# de ad ba be #](2)" ~=?? Ok (show (0xba :: Int))
       "[# de ad ba be #](-1)" ~=?? Ok "null"
