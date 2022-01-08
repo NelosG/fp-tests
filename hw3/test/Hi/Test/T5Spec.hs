@@ -43,6 +43,7 @@ spec = do
       [r|fold(div, ["kek", "cheburek"])|] ~=?? Ok [r|"kek/cheburek"|]
     it "lazy fold" $ do
       "fold(or, [true, 1, true])" ~=?? Ok "true"
+      "fold(and, [false, cwd!])" ~=?? Ok "false"
     it "empty fold" $ do
       "fold(add, [])" ~=?? Ok "null"
     it "advanced fold" $ do
