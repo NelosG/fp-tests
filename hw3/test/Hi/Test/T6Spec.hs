@@ -61,6 +61,11 @@ spec = do
     it "decode-utf8 . encode-utf8 === id" $ hedgehog $ do
       s :: String <- forAll $ Gen.string (Range.linear 1 100) Gen.unicode
       testEval ("decode-utf8(encode-utf8(" ++ show s ++ "))") === Ok (show s)
+    it "list operations" $ do
+      "[# ab cd #] + [# 10 10 #]" ~=?? Ok "[# ab cd 10 10 #]"
+      "reverse([# ab cd #])" ~=?? Ok "[# cd ab #]"
+      "length([# cd ab #])"  ~=?? Ok "2"
+      "[# ab cd #] * 5" ~=?? Ok "[# ab cd ab cd ab cd ab cd ab cd #]"
     it "indexing" $ do
       "[# de ad ba be #](2)" ~=?? Ok (show (0xba :: Int))
       "[# de ad ba be #](-1)" ~=?? Ok "null"
