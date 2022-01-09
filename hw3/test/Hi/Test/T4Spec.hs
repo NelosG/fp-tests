@@ -8,6 +8,7 @@ import Text.RawString.QQ
 
 import Control.Applicative (liftA2)
 import Data.Ratio
+import Data.Semigroup (stimes)
 import qualified Data.Text as T
 import HW3.Base
 import qualified Hedgehog.Gen as Gen
@@ -15,7 +16,6 @@ import qualified Hedgehog.Internal.Range as Range
 import Hi.Test.Common
 import Test.Hspec.Hedgehog (forAll, hedgehog, (===))
 import Text.RawString.QQ
-import Data.Semigroup (stimes)
 
 spec :: Spec
 spec = do
@@ -37,6 +37,7 @@ spec = do
       [r|"Cat" * 3|] ~=?? Ok [r|"CatCatCat"|]
       [r|"Cat" * -1|] ~=?? EvalError HiErrorInvalidArgument
       [r|"Cat" * 0|] ~=?? EvalError HiErrorInvalidArgument
+      [r|"Cat" * 1.5|] ~=?? EvalError HiErrorInvalidArgument
       [r|"/dev" / "null"|] ~=?? Ok [r|"/dev/null"|]
     it "indexing" $ do
       [r|"kill me"(0)|] ~=?? Ok [r|"k"|]

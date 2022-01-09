@@ -24,6 +24,7 @@ spec = do
     it "overload" $ do
       "[# 00 ff #] + [# 01 e3 #]" ~=?? Ok "[# 00 ff 01 e3 #]"
       "[# 00 ff #] * 3" ~=?? Ok "[# 00 ff 00 ff 00 ff #]"
+      "[# 00 ff #] * 1.5" ~=?? EvalError HiErrorInvalidArgument
     it "packs" $ do
       "unpack-bytes([# 10 20 30 #])" ~=?? Ok "[ 16, 32, 48 ]"
     it "encoding" $ do
@@ -84,4 +85,3 @@ spec = do
       "[# 1 2 #]" ~=?? ParseError ""
       "[# 123 #]" ~=?? ParseError ""
       "[# 1234 #]" ~=?? ParseError ""
-
