@@ -50,7 +50,9 @@ spec = do
       testEvalIO
           [AllowRead, AllowWrite]
           [r|read("test/exec/read.test")!|]
-        `shouldBe` Ok "\"303030\\r\\n\""
+        `shouldBe` Ok ("\"303030" ++ (drop 1 . show) (case nativeNewline of
+          LF -> "\n"
+          CRLF -> "\r\n"))
       testEvalIO
           [AllowRead, AllowWrite]
           [r|cd("test/exec")!|]
