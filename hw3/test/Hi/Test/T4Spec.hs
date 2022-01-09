@@ -54,6 +54,7 @@ spec = do
       "null /= null" ~=?? Ok "false"
       [r|"6 am"(2, null)|] ~=?? Ok [r|"am"|]
       [r|"6 am"(null, 3)|] ~=?? Ok [r|"6 a"|]
+      [r|"6 am"(null, null)|] ~=?? Ok [r|"6 am"|]
       [r|"lilmealone"(null, -1)|] ~=?? Ok [r|"lilmealon"|]
       [r|"aaa"(2, -2)|] ~=?? Ok [r|""|]
     it "int-index" $ do
