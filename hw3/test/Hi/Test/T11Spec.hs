@@ -22,7 +22,22 @@ spec = do
     it "dict dot" $ do
       [r|{ "width": 120, "height": 80 }.width|] ~=?? Ok "120"
       [r|{ "complex-ke-a1": 30 }.complex-ke-a1|] ~=?? Ok "30"
-      [r|{ "a": 1}.a-1|] ~=?? Ok "0"
+--      [r|{ "a-1": 1}.a-1|] ~=?? ParseError "" -- i don't know about that
+      [r|{ "a": echo}.a.b!|] ~=?? Ok "null"
+      [r|{ "a": echo}.a.b !|] ~=?? ParseError ""
+      [r|{ "a": echo}.a. b!|] ~=?? ParseError ""
+      [r|{ "a": echo}.a .b!|] ~=?? ParseError ""
+      [r|{ "a": echo}. a.b!|] ~=?? ParseError ""
+      [r|{ "a": echo} .a.b!|] ~=?? ParseError ""
+      [r|{ "a": echo}.a. b !|] ~=?? ParseError ""
+      [r|{ "a": echo}.a . b !|] ~=?? ParseError ""
+      [r|{ "a": echo}.a .b !|] ~=?? ParseError ""
+      [r|{ "a": echo}. a.b !|] ~=?? ParseError ""
+      [r|{ "a": echo} .a.b !|] ~=?? ParseError ""
+      [r|{ "a": echo} .a .b !|] ~=?? ParseError ""
+      [r|{ "a": echo} . a .b !|] ~=?? ParseError ""
+      [r|{ "a": echo} .a . b !|] ~=?? ParseError ""
+      [r|{ "a": echo} . a . b !|] ~=?? ParseError ""
     it "keys and values" $ do
       [r|keys({ "width": 120, "height": 80 })|] ~=?? Ok [r|[ "height", "width" ]|]
       [r|values({ "width": 120, "height": 80 })|] ~=?? Ok [r|[ 80, 120 ]|]
