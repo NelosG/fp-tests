@@ -25,6 +25,12 @@ spec = do
     it "inclusive" $ do
       testEvalIO [] "rand(0, 0)!" `shouldBe` Ok "0"
       testEvalIO [AllowWrite] "echo(\"hello\")! || rand(30, 30)!" `shouldBe` Ok "30"
+    it "hello suicides" $ do
+      testEvalIO [] "rand(1234567898765432123, 1234567898765432123)!" `shouldBe` Ok "1234567898765432123"
+      testEvalIO [] "rand(1234567898765432123, 12345678987654321234)!" `shouldBe` EvalError HiErrorInvalidArgument
+      testEvalIO [] "rand(1234567898765432123, -12345678987654321234)!" `shouldBe` EvalError HiErrorInvalidArgument
+      testEvalIO [] "rand(12345678987654321234, 1234567898765432123)!" `shouldBe` EvalError HiErrorInvalidArgument
+      testEvalIO [] "rand(-12345678987654321234, 1234567898765432123)!" `shouldBe` EvalError HiErrorInvalidArgument
     it "rand" $ hedgehog $ do
       lower <- forAll $ Gen.int (Range.linear 0 30)
       upper <- forAll $ Gen.int (Range.linear lower 40)

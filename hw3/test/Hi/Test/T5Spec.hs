@@ -51,6 +51,11 @@ spec = do
       "fold(add, [3, 3])" ~=?? Ok "6"
       "fold([29, 30, 31, 32, 33], [1])" ~=?? Ok "1"
       "fold([29, 30, 31, 32, 33], [1, 3])" ~=?? Ok "[ 30, 31 ]"
+    it "BadRange" $ do
+      "range(7658493021983457445412345654321368, 7658493021983457445412345654321368.25)" ~=?? Ok "[ 7658493021983457445412345654321368 ]"
+      "range(0.96, 1.4)" ~=?? Ok "[ 0.96 ]"
+      "range(0.96, 1.5)" ~=?? Ok "[ 0.96, 1.96 ]"
+      "range(0.96, -1.25)" ~=?? Ok "[ ]"
     it "operator properties" $ hedgehog $ do
       s1@(HiValueList l1) <- forAll genSeq
       s2@(HiValueList l2) <- forAll genSeq
@@ -62,3 +67,4 @@ spec = do
       n <- forAll $ Gen.integral $ Range.linear 0 $ (length l) - 1
       (HiExprApply (HiExprValue s) ([HiExprValue $ HiValueNumber $ (toInteger n) % 1]))
         ~=!! (Ok . showExpr . HiExprValue $ index l n)
+    
