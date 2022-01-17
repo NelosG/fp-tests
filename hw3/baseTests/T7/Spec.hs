@@ -208,7 +208,12 @@ prop_io_session =
       HiValueList (Seq.fromList [
         HiValueString (Text.pack "a"),
         HiValueString (Text.pack "b")
-      ])
+      ]) || 
+        read_tmp_out' `eqValue`
+        HiValueList (Seq.fromList [
+          HiValueString (Text.pack "b"),
+          HiValueString (Text.pack "a")
+        ])
     exec "write(\"tmpdir/hi.txt\", \"Hello\")!"
     exec "cd(\"tmpdir\")!"
     read_hi_out <- exec "read(\"hi.txt\")!"
