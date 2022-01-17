@@ -88,5 +88,238 @@ tests:
       - raw-strings-qq
       - HUnit
       - directory
+      - bytestring
+      - QuickCheck
       - template-haskell
     build-tools: hspec-discover
+
+  T1:
+    main: Spec.hs
+    source-dirs: baseTests/T1
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T2:
+    main: Spec.hs
+    source-dirs: baseTests/T2
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T3:
+    main: Spec.hs
+    source-dirs: baseTests/T3
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T4:
+    main: Spec.hs
+    source-dirs: baseTests/T4
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T5:
+    main: Spec.hs
+    source-dirs: baseTests/T5
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T6:
+    main: Spec.hs
+    source-dirs: baseTests/T6
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T7:
+    main: Spec.hs
+    source-dirs: baseTests/T7
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T8:
+    main: Spec.hs
+    source-dirs: baseTests/T8
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T9:
+    main: Spec.hs
+    source-dirs: baseTests/T9
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T10:
+    main: Spec.hs
+    source-dirs: baseTests/T10
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3
+
+  T11:
+    main: Spec.hs
+    source-dirs: baseTests/T11
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - base
+      - containers
+      - transformers
+      - text
+      - bytestring
+      - directory
+      - template-haskell
+      - QuickCheck
+      - megaparsec
+      - prettyprinter
+      - time
+      - hw3

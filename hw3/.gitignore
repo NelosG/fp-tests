@@ -10,4 +10,4 @@ stack.yaml.lock
 # IDE
 .vscode/
 .idea/
-fp-hw2-tests.iml
+*.iml
