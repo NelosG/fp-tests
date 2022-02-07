@@ -1,4 +1,3 @@
-  Homework Checker header { padding: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-bottom: 1px solid #888; } .download-button { margin: 20px; color: white; background: #e3301b; padding: 10px; text-decoration: none; font-family: sans-serif; user-select: none; } .download-button:hover { text-decoration: underline; } h1 { font-size: 20px; font-variant: small-caps; } h2 { font-size: 16px; } main { padding: 50px; max-width: 600px; } pre { margin-left: 1em; padding-left: 1em; border-left: 1px solid #888; } 
 
 **ITMO FP Course** Homework Checker [Download](https://int-index.gitlab.io/hw-checker/hw-checker)
 
